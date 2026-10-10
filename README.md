@@ -4,27 +4,57 @@ An educational app for children: crafts, arithmetic games, a dinosaur quiz,
 memory and planet puzzles. Built for our own children first, and meant to be
 offered to other parents and to schools later.
 
-It started inside the BuitenZijn app and is now its own product, with its own
-repo, app ID and Convex project. Development starts after the BuitenZijn
-rebuild; until then this repo holds what must not get lost.
+It started inside the BuitenZijn app and is now its own product. The
+foundation (Convex Auth, the Tamagui design system, CI) is shared with the
+BuitenZijn repo; the games are ported from the old app one by one.
 
-## Contents
+## Structure
 
 | Path | What |
 | --- | --- |
-| `docs/ELLA_INVENTORY.md` | Every game and feature of the old implementation, where its code lives, and the decisions made for the new app |
-| `seed/*.json` | Content exported from the old app: dinosaurs, planets, craft videos, memory themes, puzzle images, game settings |
-| `seed/images/` | The images the seed files reference (`imageFile` / `storageFile`) |
-| `seed/assets/` | Puzzle images and sound effects that were bundled with the old app |
+| `apps/web` | Next.js website: home, sign-in, account, admin |
+| `apps/mobile` | Expo / React Native app |
+| `packages/backend` | Convex functions and schema, shared by both apps |
+| `packages/ui` | Tamagui design system shared by web and mobile |
+| `packages/shared` | Dependency-free helpers and shared config |
+| `docs/` | The inventory of the old implementation and the plan |
+| `seed/` | Content exported from the old app (dinosaurs, planets, crafts, …) |
 
-The old code is in the `BuitenZijnApp` repo at tag
-`archive/pre-split-2026-10-10`.
+## Setup
 
-## Planned setup
+```bash
+pnpm install
+cp .env.example .env    # points the apps at the dev deployment
+```
 
-Same stack as BuitenZijn (and XploreR): a turborepo with a Next.js web app, an
-Expo mobile app and a Convex backend with Convex Auth, Resend for email and a
-shared Tamagui design system.
+The Convex deployment needs these environment variables
+(`npx convex env set NAME value` in `packages/backend`):
+
+| Variable | Value |
+| --- | --- |
+| `JWT_PRIVATE_KEY`, `JWKS` | Generate with `node packages/backend/scripts/generateKeys.mjs` |
+| `SITE_URL` | The web app's URL (`http://localhost:3000` in development) |
+| `AUTH_RESEND_KEY` | Resend API key, for verification and password-reset emails |
+| `EMAIL_FROM` | Sender, e.g. `Ella <noreply@…>` |
+
+## Running and checks
+
+```bash
+pnpm dev          # Convex + web
+pnpm dev:all      # Convex + web + mobile (Expo)
+pnpm check-types && pnpm lint && pnpm test
+```
+
+## Before the first public release
+
+- **App ID and name:** `app.ella.learn` and "Ella" are working values
+  (`apps/mobile/app.json`); there is no EAS project or app icon yet.
+- **Support address and domain:** `SUPPORT_EMAIL` and `DEFAULT_SITE_URL` in
+  `packages/shared/src/config.ts` are placeholders.
+- **Privacy policy:** the page is a draft for the test version with our own
+  children; have it reviewed before offering Ella to other families.
+
+## Plan
 
 - A parent signs up and adds child profiles; children don't get an email or
   password.
@@ -34,3 +64,5 @@ shared Tamagui design system.
 - Classes and teacher accounts come later; the data model leaves room for them.
 - Children's data: collect as little as possible, no third-party tracking, and
   meet the Google Play Families policy.
+
+See `docs/ELLA_INVENTORY.md` for every game of the old implementation.

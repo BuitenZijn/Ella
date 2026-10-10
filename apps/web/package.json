@@ -1,0 +1,42 @@
+{
+  "name": "@ella/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "npx convex deploy --cmd 'next build'",
+    "build:local": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@ella/backend": "workspace:*",
+    "@ella/shared": "workspace:*",
+    "@ella/ui": "workspace:*",
+    "@convex-dev/auth": "^0.0.95",
+    "browser-image-compression": "^2.0.2",
+    "convex": "^1.45.0",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^1.37.0",
+    "next": "16.3.3",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-image-crop": "^11.1.2",
+    "rrule": "^2.8.1"
+  },
+  "devDependencies": {
+    "@ella/prettier-config": "workspace:*",
+    "@types/node": "^22.20.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "dotenv": "^17.4.2",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  },
+  "prettier": "@ella/prettier-config"
+}

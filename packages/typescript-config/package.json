@@ -1,0 +1,14 @@
+{
+  "name": "@ella/typescript-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@ella/prettier-config": "workspace:*",
+    "prettier": "^3.9.6"
+  },
+  "prettier": "@ella/prettier-config"
+}

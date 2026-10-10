@@ -1,0 +1,20 @@
+[
+  {
+    "game": "planet_puzzle",
+    "settings": {
+      "blanksPerRound": 0,
+      "bombChance": 0,
+      "gridSize": 4
+    },
+    "updatedAt": 1772993890745
+  },
+  {
+    "game": "multiplication_grid",
+    "settings": {
+      "blanksPerRound": 10,
+      "bombChance": 0.3,
+      "gridSize": 10
+    },
+    "updatedAt": 1771965957182
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "De grootste planeet, een gasreus met meer dan 90 manen.",
+    "leukWeetje": "De \"Grote Rode Vlek\" op Jupiter is een storm die al minstens 350 jaar onafgebroken raast.",
+    "nederlandseNaam": "Jupiter",
+    "nummer": 5,
+    "wetenschappelijkeNaam": "Iuppiter",
+    "imageFile": "kg2101m44k1e16nfq2ygjzrc6h82fzdm.png"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "De verste planeet, bekend om zijn felle blauwe kleur.",
+    "leukWeetje": "Op Neptunus waaien de krachtigste winden van het zonnestelsel, met snelheden tot 2.100 km/u.",
+    "nederlandseNaam": "Neptunus",
+    "nummer": 8,
+    "wetenschappelijkeNaam": "Neptunus",
+    "imageFile": "kg2dwbs9304y6qb8t6v5vm08vn82fbr8.jpeg"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "De \"Rode Planeet\", bekend om zijn ijzeroxide-stof.",
+    "leukWeetje": "Mars heeft de hoogste berg van het zonnestelsel, Olympus Mons, die drie keer zo hoog is als de Mount Everest.",
+    "nederlandseNaam": "Mars",
+    "nummer": 4,
+    "wetenschappelijkeNaam": "Mars",
+    "imageFile": "kg26n2phwzddnj2v8v8k2crdah820vxg.png"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "Een ijzige wereld in de Kuipergordel.",
+    "leukWeetje": "Sinds 2006 wordt Pluto niet meer als een volwaardige planeet gezien, maar als een dwergplaneet.",
+    "nederlandseNaam": "Pluto (Dwergplaneet)",
+    "nummer": 9,
+    "wetenschappelijkeNaam": "Pluto",
+    "imageFile": "kg29pjj6xqqbkr35d03x6enrp582e066.png"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "Een ijsreus die op zijn kant om de zon rolt.",
+    "leukWeetje": "Uranus is de koudste planeet in ons zonnestelsel, met temperaturen tot wel -224°C.",
+    "nederlandseNaam": "Uranus",
+    "nummer": 7,
+    "wetenschappelijkeNaam": "Uranus",
+    "imageFile": "kg2f8bxdrgcjg36c5t1xrn9d9d82e7k1.jpeg"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "Onze thuisbasis en de enige bekende planeet met leven.",
+    "leukWeetje": "De Aarde is de enige planeet die niet vernoemd is naar een Griekse of Romeinse god.",
+    "nederlandseNaam": "Aarde",
+    "nummer": 3,
+    "wetenschappelijkeNaam": "Terra",
+    "imageFile": "kg263mwhg1g6xgnr4mxqtz55ed8203h9.jpeg"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "Een gasreus met het meest uitgebreide ringsysteem.",
+    "leukWeetje": "Saturnus heeft een zo lage dichtheid dat de planeet zou blijven drijven als je een badkuip had die groot genoeg was.",
+    "nederlandseNaam": "Saturnus",
+    "nummer": 6,
+    "wetenschappelijkeNaam": "Saturnus",
+    "imageFile": "kg2b601yv744g8vnfe863pspa9820mdb.jpeg"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "De kleinste planeet en het dichtst bij de zon.",
+    "leukWeetje": "Hoewel hij het dichtst bij de zon staat, is hij niet de warmste planeet (dat is Venus).",
+    "nederlandseNaam": "Mercurius",
+    "nummer": 1,
+    "wetenschappelijkeNaam": "Mercurius",
+    "imageFile": "kg2ekh7yvdqx2ngkczcjm2yfyd81twxd.png"
+  },
+  {
+    "createdAt": 1771966361205,
+    "korteBeschrijving": "Een planeet met een extreem dikke, giftige atmosfeer.",
+    "leukWeetje": "Op Venus regent het zwavelzuur, maar het is er zo heet dat de regen verdampt voordat het de grond raakt.",
+    "nederlandseNaam": "Venus",
+    "nummer": 2,
+    "wetenschappelijkeNaam": "Venus",
+    "imageFile": "kg24s574qyetyd5w0515fdwd95821xmt.jpeg"
+  }
+]

@@ -15,15 +15,19 @@ import type * as crons from "../crons.js";
 import type * as functions_admin from "../functions/admin.js";
 import type * as functions_appVersions from "../functions/appVersions.js";
 import type * as functions_content from "../functions/content.js";
+import type * as functions_contentAdmin from "../functions/contentAdmin.js";
+import type * as functions_family from "../functions/family.js";
 import type * as functions_users from "../functions/users.js";
 import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_errors from "../lib/errors.js";
+import type * as lib_games from "../lib/games.js";
 import type * as lib_passwordResetLinks from "../lib/passwordResetLinks.js";
 import type * as lib_permissions from "../lib/permissions.js";
 import type * as lib_random from "../lib/random.js";
 import type * as lib_storageClaims from "../lib/storageClaims.js";
 import type * as lib_types from "../lib/types.js";
+import type * as lib_youtube from "../lib/youtube.js";
 
 import type {
   ApiFromModules,
@@ -39,15 +43,19 @@ declare const fullApi: ApiFromModules<{
   "functions/admin": typeof functions_admin;
   "functions/appVersions": typeof functions_appVersions;
   "functions/content": typeof functions_content;
+  "functions/contentAdmin": typeof functions_contentAdmin;
+  "functions/family": typeof functions_family;
   "functions/users": typeof functions_users;
   http: typeof http;
   "lib/auth": typeof lib_auth;
   "lib/errors": typeof lib_errors;
+  "lib/games": typeof lib_games;
   "lib/passwordResetLinks": typeof lib_passwordResetLinks;
   "lib/permissions": typeof lib_permissions;
   "lib/random": typeof lib_random;
   "lib/storageClaims": typeof lib_storageClaims;
   "lib/types": typeof lib_types;
+  "lib/youtube": typeof lib_youtube;
 }>;
 
 /**

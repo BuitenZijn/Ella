@@ -20,6 +20,42 @@ export const mobilePlatformValidator = v.union(
 
 export const roleValidator = v.union(v.literal('user'), v.literal('admin'))
 
+export const gameValidator = v.union(
+  v.literal('maaltafel_puzzel'),
+  v.literal('rekenoefeningen'),
+  v.literal('dino_quiz'),
+  v.literal('memory'),
+  v.literal('planeten_puzzel'),
+)
+
+export const craftCategoryValidator = v.union(
+  v.literal('tekenen'),
+  v.literal('vouwen'),
+  v.literal('schilderen'),
+  v.literal('verven'),
+  v.literal('slijm maken'),
+  v.literal('boetseren'),
+  v.literal('stempelen'),
+)
+
+export const mathLevelValidator = v.object({
+  id: v.string(),
+  label: v.string(),
+  emoji: v.string(),
+  minNumber: v.number(),
+  maxNumber: v.number(),
+  addition: v.boolean(),
+  subtraction: v.boolean(),
+  multiplication: v.boolean(),
+  division: v.boolean(),
+  fractions: v.boolean(),
+  questionsPerRound: v.number(),
+  timeLimitSeconds: v.number(),
+  pointsPerCorrect: v.number(),
+  speedBonus: v.number(),
+  starThresholds: v.array(v.number()),
+})
+
 /** A card in one of the encyclopedia-style games (dinosaurs, planets). */
 const encyclopediaEntry = {
   /** Position in the list, from the old app */
@@ -119,4 +155,78 @@ export default defineSchema({
 
   /** The planet puzzles: one picture per planet. */
   planets: defineTable(encyclopediaEntry).index('by_number', ['number']),
+
+  /** Craft videos (YouTube), per category. */
+  crafts: defineTable({
+    category: craftCategoryValidator,
+    title: v.string(),
+    youtubeUrl: v.string(),
+    description: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_category', ['category']),
+
+  memoryThemes: defineTable({
+    name: v.string(),
+    emoji: v.string(),
+    emojis: v.array(v.string()),
+    active: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_active', ['active']),
+
+  /** Pictures that show through the multiplication grid. */
+  puzzleImages: defineTable({
+    name: v.string(),
+    image: v.id('_storage'),
+    active: v.boolean(),
+    createdAt: v.number(),
+  }).index('by_active', ['active']),
+
+  /** One row per game with settings; the code has the defaults. */
+  gameSettings: defineTable({
+    game: v.union(v.literal('maaltafel_puzzel'), v.literal('rekenoefeningen')),
+    maaltafel: v.optional(
+      v.object({ gridSize: v.number(), blanksPerRound: v.number(), bombChance: v.number() }),
+    ),
+    mathLevels: v.optional(v.array(mathLevelValidator)),
+    updatedAt: v.number(),
+  }).index('by_game', ['game']),
+
+  // --------------------------------------------------------------------------
+  // Families
+  // --------------------------------------------------------------------------
+
+  /**
+   * A child's profile under a parent's account. Children have no account,
+   * email or password: only a first name or nickname and an emoji.
+   */
+  children: defineTable({
+    parentId: v.id('users'),
+    name: v.string(),
+    avatar: v.string(),
+    createdAt: v.number(),
+  }).index('by_parent', ['parentId']),
+
+  /** One finished game. */
+  scores: defineTable({
+    childId: v.id('children'),
+    /** For deleting a family's data with the parent's account */
+    parentId: v.id('users'),
+    game: gameValidator,
+    timeSeconds: v.number(),
+    moves: v.optional(v.number()),
+    mistakes: v.optional(v.number()),
+    correct: v.optional(v.number()),
+    total: v.optional(v.number()),
+    points: v.optional(v.number()),
+    stars: v.optional(v.number()),
+    /** e.g. "4x4", "easy" */
+    difficulty: v.optional(v.string()),
+    /** e.g. the planet's name */
+    subject: v.optional(v.string()),
+    completedAt: v.number(),
+  })
+    .index('by_child_and_game', ['childId', 'game', 'completedAt'])
+    .index('by_parent', ['parentId']),
 })

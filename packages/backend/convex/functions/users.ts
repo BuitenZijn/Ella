@@ -626,6 +626,26 @@ type DeletionStep = (
   budget: number,
 ) => Promise<number>
 
+/** The family: scores first, then the child profiles. */
+async function deleteFamily(
+  ctx: MutationCtx,
+  userId: Id<'users'>,
+  budget: number,
+): Promise<number> {
+  const scores = await ctx.db
+    .query('scores')
+    .withIndex('by_parent', q => q.eq('parentId', userId))
+    .take(budget)
+  for (const score of scores) await ctx.db.delete(score._id)
+  if (scores.length === budget) return budget
+  const children = await ctx.db
+    .query('children')
+    .withIndex('by_parent', q => q.eq('parentId', userId))
+    .take(budget - scores.length)
+  for (const child of children) await ctx.db.delete(child._id)
+  return scores.length + children.length
+}
+
 /**
  * Every remaining blob the user uploaded, including ones no longer attached
  * to anything (a replaced profile picture).
@@ -682,7 +702,7 @@ export const processAccountDeletion = internalMutation({
   handler: async (ctx, { userId }) => {
     // Each feature that stores rows per user adds its step here, before the
     // storage step (a feature's rows may reference claimed blobs).
-    const steps: DeletionStep[] = [deleteClaimedStorage]
+    const steps: DeletionStep[] = [deleteFamily, deleteClaimedStorage]
 
     let budget = DELETION_PASS_BUDGET
     for (const step of steps) {

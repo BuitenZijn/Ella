@@ -1,7 +1,8 @@
 /**
  * Ella Design System - Color Palette
  *
- * A light, playful palette: lavender pages, white cards, purple actions.
+ * Ella's brand palette: cream pages (PANTONE P 3-9 C), white cards, blue
+ * buttons and frames (P 104-8 C), pink text (P 73-7 C).
  * Components only use the semantic groups below, never raw values.
  */
 
@@ -14,20 +15,18 @@
  * @internal - Do not import directly, use semantic color groups instead
  */
 const paletteColors = {
-  /** Lavender - page background */
-  lavender: '#F6F4FF',
+  /** Cream (PANTONE P 3-9 C) - page background */
+  cream: '#F1EEDB',
   /** White - cards and surfaces */
   white: '#FFFFFF',
-  /** Lavender Hover - hover/pressed surfaces */
-  lavenderHover: '#ECE8FF',
-  /** Bright violet - accents, highlights */
-  violet: '#8B6CFF',
-  /** Purple - primary fills; white text on it stays readable */
-  purple: '#5B3FD6',
-  /** Purple hover */
-  purpleHover: '#4A31B8',
-  /** Violet light - subtle violet backgrounds */
-  violetLight: 'rgba(139, 108, 255, 0.14)',
+  /** Cream hover - hover/pressed surfaces */
+  creamHover: '#E7E4D2',
+  /** Ella blue (PANTONE P 104-8 C) - buttons and frames; white text on it stays readable */
+  ellaBlue: '#005DAC',
+  /** Ella blue hover */
+  ellaBlueHover: '#004F92',
+  /** Ella blue light - subtle blue backgrounds */
+  ellaBlueLight: 'rgba(0, 93, 172, 0.12)',
   /** Blue - secondary, information */
   blue: '#186DB7',
   /** Blue hover */
@@ -52,33 +51,29 @@ const paletteColors = {
   rustHover: '#901624',
   /** Rust red light - subtle red backgrounds */
   rustLight: 'rgba(183, 29, 46, 0.1)',
-  /** Ink - headers and primary text */
-  ink: '#1F1A33',
-  /** Gray - secondary text, labels */
+  /** Pink (PANTONE P 73-7 C) - headers and text */
+  pink: '#EE478C',
+  /** Pink muted - placeholders, inactive icons */
+  pinkMuted: '#EF689C',
+  /** Gray - neutral labels (archived status) */
   gray: '#4D4766',
-  /** Gray muted - placeholders, inactive icons */
-  grayMuted: '#6B6585',
-  /** Border color for cards and elements */
-  border: '#DCD6F2',
-  /** Border color hover state */
-  borderStrong: '#C4BCE6',
 } as const
 
 // =============================================================================
-// Brand Colors - Primary accent colors (purple)
+// Brand Colors - Primary accent colors (Ella blue)
 // =============================================================================
 
 export const brandColors = {
   /** Primary brand color - main CTAs, links, active states */
-  primary: paletteColors.purple,
+  primary: paletteColors.ellaBlue,
   /** Primary hover/active state */
-  primaryHover: paletteColors.purpleHover,
+  primaryHover: paletteColors.ellaBlueHover,
   /** Primary for text on light backgrounds */
-  primaryText: paletteColors.purpleHover,
-  /** Logo green - accents and highlights, not for text */
-  accent: paletteColors.violet,
+  primaryText: paletteColors.ellaBlue,
+  /** Accents and highlights */
+  accent: paletteColors.ellaBlue,
   /** Light primary for subtle backgrounds */
-  primaryLight: paletteColors.violetLight,
+  primaryLight: paletteColors.ellaBlueLight,
 
   /** Secondary brand color - information (blue) */
   secondary: paletteColors.blue,
@@ -144,24 +139,24 @@ export const semanticColors = {
 export const neutralColors = {
   /** Background colors - use for cards, sections, hover states */
   background: {
-    page: paletteColors.lavender,
+    page: paletteColors.cream,
     elevated: paletteColors.white,
     /** Card background - alias for elevated */
     card: paletteColors.white,
-    hover: paletteColors.lavenderHover,
-    active: paletteColors.lavenderHover,
+    hover: paletteColors.creamHover,
+    active: paletteColors.creamHover,
   },
 
   /** Text colors - use for content hierarchy */
   text: {
     /** Primary text - main content */
-    primary: paletteColors.ink,
+    primary: paletteColors.pink,
     /** Secondary text - labels, descriptions */
-    secondary: paletteColors.gray,
+    secondary: paletteColors.pink,
     /** Tertiary text - less important, alias for muted */
-    tertiary: paletteColors.grayMuted,
+    tertiary: paletteColors.pinkMuted,
     /** Muted text - placeholders, disabled */
-    muted: paletteColors.grayMuted,
+    muted: paletteColors.pinkMuted,
     /** Inverse text - on dark backgrounds */
     inverse: paletteColors.white,
     /** Text and icons on a brand fill (green, blue, rust buttons) */
@@ -170,11 +165,11 @@ export const neutralColors = {
 
   /** Border colors */
   border: {
-    default: paletteColors.border,
+    default: paletteColors.ellaBlue,
     /** Subtle border - alias for default */
-    subtle: paletteColors.border,
-    strong: paletteColors.borderStrong,
-    focus: paletteColors.purple,
+    subtle: paletteColors.ellaBlue,
+    strong: paletteColors.ellaBlueHover,
+    focus: paletteColors.ellaBlue,
   },
 } as const
 
@@ -184,9 +179,9 @@ export const neutralColors = {
 
 export const roleColors = {
   admin: {
-    background: paletteColors.violetLight,
-    text: paletteColors.purple,
-    border: paletteColors.purple,
+    background: paletteColors.ellaBlueLight,
+    text: paletteColors.ellaBlue,
+    border: paletteColors.ellaBlue,
   },
   user: {
     background: paletteColors.blueLight,
@@ -211,9 +206,9 @@ export const statusColors = {
     border: paletteColors.blue,
   },
   draft: {
-    background: paletteColors.violetLight,
-    text: paletteColors.purple,
-    border: paletteColors.purple,
+    background: paletteColors.ellaBlueLight,
+    text: paletteColors.ellaBlue,
+    border: paletteColors.ellaBlue,
   },
   archived: {
     background: 'rgba(107, 124, 138, 0.15)',

@@ -2,7 +2,7 @@ import { config } from '@tamagui/config/v3'
 import { createTamagui } from 'tamagui'
 import { neutralColors, brandColors } from './colors'
 
-// The Ella light theme: lavender pages, white cards, purple actions
+// The Ella light theme: cream pages, white cards, blue actions, pink text
 const ellaLight = {
   // Background colors
   background: neutralColors.background.page,

@@ -1,11 +1,11 @@
-const { getSentryExpoConfig } = require('@sentry/react-native/metro')
+const { getDefaultConfig } = require('expo/metro-config')
 const path = require('path')
 
 // Find the project root (monorepo root)
 const projectRoot = __dirname
 const monorepoRoot = path.resolve(projectRoot, '../..')
 
-const config = getSentryExpoConfig(projectRoot)
+const config = getDefaultConfig(projectRoot)
 
 // Watch the specific workspace packages the mobile app imports,
 // merged with Expo's defaults so expo-doctor is happy.

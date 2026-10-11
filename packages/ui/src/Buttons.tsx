@@ -1,7 +1,6 @@
 import { createContext } from 'react'
 import { styled, GetProps, Button as TamaguiButton } from 'tamagui'
 import { brandColors } from './colors'
-import { DARK_INK_ON_FILL } from './fillInk'
 
 /** Variants whose background is a light brand fill (amber, teal, ember). */
 const FILLED_VARIANTS: ReadonlySet<string> = new Set([
@@ -17,8 +16,7 @@ const BRAND_VARIANTS: ReadonlySet<string> = new Set(['primary', 'warning'])
 /**
  * Set inside a filled Button: 'brand' for the brand fill (its label follows
  * the theme, blue on a card), 'status' for the danger and success fills
- * (white label). ButtonText reads it. Web only; the native app keeps its own
- * labels (see fillInk.native.ts).
+ * (white label). ButtonText reads it.
  */
 export type ButtonFill = 'brand' | 'status' | false
 export const ButtonFillContext = createContext<ButtonFill>(false)
@@ -136,15 +134,13 @@ const ButtonFrame = styled(TamaguiButton, {
  * Variants: primary, secondary, danger, success, warning, ghost, outline, outline-danger
  * Sizes: $3, $4, $5
  *
- * On the web, a ButtonText inside a filled variant (primary, danger,
- * success, warning) uses dark ink automatically, unless the button overrides
- * its background or the text sets its own color. The native app keeps its
- * white labels.
+ * A ButtonText inside a filled variant (primary, danger, success, warning)
+ * takes that fill's label color automatically, unless the button overrides
+ * its background or the text sets its own color.
  */
 export const Button = ButtonFrame.styleable(function Button(props, ref) {
   const variant = props.variant ?? 'primary'
   const filled: ButtonFill =
-    DARK_INK_ON_FILL &&
     FILLED_VARIANTS.has(variant) &&
     props.backgroundColor === undefined &&
     (BRAND_VARIANTS.has(variant) ? 'brand' : 'status')

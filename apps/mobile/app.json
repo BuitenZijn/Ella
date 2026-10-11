@@ -10,8 +10,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "app.ella.learn",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false,
-        "NSPhotoLibraryUsageDescription": "Ella laat je een foto kiezen voor je profiel."
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -45,7 +44,15 @@
           "recordAudioAndroid": false
         }
       ],
-      "expo-image"
+      "expo-image",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Ella laat je een foto kiezen voor je profiel.",
+          "cameraPermission": "Ella laat je een foto nemen voor je profiel.",
+          "microphonePermission": false
+        }
+      ]
     ]
   }
 }

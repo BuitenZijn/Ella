@@ -142,7 +142,7 @@ export function SignUpForm({
               </button>
             </div>
             <Text id='password-hint' size='$2' variant='subtle'>
-              Minstens {MIN_PASSWORD_LENGTH} characters.
+              Minstens {MIN_PASSWORD_LENGTH} tekens.
             </Text>
           </FormFieldContainer>
 

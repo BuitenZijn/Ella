@@ -74,7 +74,7 @@ export function MinimumVersionScreen({
             >
               <Download size={32} color={brandColors.primary} />
             </YStack>
-            <MicroLabel color={brandColors.primary}>UPDATE REQUIRED</MicroLabel>
+            <MicroLabel color={brandColors.primary}>UPDATE NODIG</MicroLabel>
             <Text
               size='$8'
               weight='bold'
@@ -102,7 +102,7 @@ export function MinimumVersionScreen({
           >
             <XStack alignItems='center' justifyContent='space-between' gap='$4'>
               <YStack gap='$1' flex={1}>
-                <MicroLabel>CURRENT</MicroLabel>
+                <MicroLabel>JOUW VERSIE</MicroLabel>
                 <Text size='$4' weight='semibold' selectable>
                   {currentVersion}
                 </Text>
@@ -114,7 +114,7 @@ export function MinimumVersionScreen({
               <ArrowRight size={22} color={neutralColors.text.muted} />
 
               <YStack gap='$1' flex={1} alignItems='flex-end'>
-                <MicroLabel color={brandColors.primary}>REQUIRED</MicroLabel>
+                <MicroLabel color={brandColors.primary}>NODIG</MicroLabel>
                 <Text
                   size='$4'
                   weight='semibold'

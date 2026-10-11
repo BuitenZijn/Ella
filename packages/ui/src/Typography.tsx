@@ -175,7 +175,7 @@ const ButtonTextFrame = styled(Paragraph, {
       },
       /**
        * cta - primary call-to-action treatment (Instrument): uppercase,
-       * tracked, dark ink on the amber fill. Opt-in per button.
+       * tracked, in the fill's label color. Opt-in per button.
        */
       cta: {
         color: '$onBrand',
@@ -202,11 +202,10 @@ const ButtonTextFrame = styled(Paragraph, {
 })
 
 /**
- * ButtonText - label inside a Button. On the web, inside a filled Button
- * (primary, danger, success, warning) it uses the label color of that fill
- * whatever its variant: white, or blue on a card's white brand button. Pass
- * `color` to opt out. The native app keeps its own labels (see
- * fillInk.native.ts).
+ * ButtonText - label inside a Button. Inside a filled Button (primary,
+ * danger, success, warning) it uses the label color of that fill whatever its
+ * variant: white, or blue on a card's white brand button. Pass `color` to
+ * opt out.
  */
 export const ButtonText = ButtonTextFrame.styleable(
   function ButtonText(props, ref) {

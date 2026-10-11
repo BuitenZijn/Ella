@@ -101,7 +101,7 @@ export function ChangePasswordScreen() {
                   <Text size='$4' weight='semibold'>
                     {email}
                   </Text>
-                  . Open it to choose a new password securely in Xplorer.
+                  . Open die om een nieuw wachtwoord te kiezen.
                 </Text>
               </YStack>
             ) : (

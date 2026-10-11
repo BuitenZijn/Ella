@@ -2,7 +2,7 @@ import { styled, GetProps, YStack, Theme } from 'tamagui'
 import { brandColors, cardColors } from './colors'
 
 /**
- * Card - Primary container component for the Xplorer design system.
+ * Card - Primary container component for the Ella design system.
  *
  * This is the main card component. Use it for all card-like containers.
  *

@@ -1,6 +1,6 @@
-# Xplorer UI Components
+# Ella UI Components
 
-This package contains the shared UI components for the Xplorer platform, built on top of Tamagu.
+This package contains the shared UI components for Ella's web and mobile apps, built on top of Tamagui.
 
 ## Table of Contents
 

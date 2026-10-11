@@ -166,7 +166,7 @@ function App() {
           alignItems='center'
         >
           <Spinner size='large' />
-          <Text marginTop='$4'>Loading...</Text>
+          <Text marginTop='$4'>Laden…</Text>
         </YStack>
         <StatusBar style='dark' />
       </TamaguiProvider>

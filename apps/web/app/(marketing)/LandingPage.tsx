@@ -30,7 +30,7 @@ const ACTIVITIES: { icon: LucideIcon; title: string; text: string }[] = [
   {
     icon: Orbit,
     title: 'Planeten',
-    text: 'Schuifpuzzels met de planeten van ons zonnestelsel.',
+    text: 'Puzzels met de planeten van ons zonnestelsel.',
   },
 ]
 
@@ -70,8 +70,9 @@ export function LandingPage() {
             maxWidth={620}
           >
             Ella is een leerapp voor kinderen: knutselen, rekenen, dinosaurussen
-            en de planeten, in korte spelletjes. Ouders maken een account en een
-            profiel per kind.
+            en de planeten, in korte spelletjes in de app. Ouders maken een
+            account en een profiel per kind, en volgen de resultaten op de
+            website.
           </Text>
           <XStack gap='$3' flexWrap='wrap' justifyContent='center'>
             <ButtonLink href='/sign-up' size='lg'>

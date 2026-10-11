@@ -80,7 +80,10 @@ for (const [table, file] of [
     }
     try {
       const image = row.imageFile ? await upload(row.imageFile) : undefined
-      convexRun('functions/content:seedEntry', image ? { ...entry, image } : entry)
+      convexRun(
+        'functions/content:seedEntry',
+        image ? { ...entry, image } : entry,
+      )
       console.log(`${table} #${row.nummer} ${row.nederlandseNaam}`)
     } catch (error) {
       const message = String(error.stderr ?? error.message)
@@ -124,10 +127,14 @@ for (const picture of readSeed('ella_puzzle_images.json')) {
     image: await upload(picture.storageFile),
     active: picture.isActive && !isPhoto(picture.name),
   })
-  console.log(`puzzle image ${picture.name}${added === 'true' ? '' : ': already there, skipped'}`)
+  console.log(
+    `puzzle image ${picture.name}${added === 'true' ? '' : ': already there, skipped'}`,
+  )
 }
 
-const grid = readSeed('ella_game_settings.json').find(s => s.game === 'multiplication_grid')
+const grid = readSeed('ella_game_settings.json').find(
+  s => s.game === 'multiplication_grid',
+)
 if (grid) {
   convexRun('functions/content:seedMaaltafelSettings', grid.settings)
   console.log('maaltafel settings')

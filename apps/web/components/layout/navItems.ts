@@ -1,5 +1,7 @@
 import {
+  Baby,
   Home,
+  Library,
   Settings,
   Shield,
   ShieldCheck,
@@ -25,7 +27,15 @@ export const PUBLIC_LINKS: NavItem[] = [
  * Member destinations. Each activity that is ported adds its entry here,
  * with the permission that gates it where it has one.
  */
-export const MAIN_LINKS: (NavItem & { permission?: string })[] = []
+export const MAIN_LINKS: (NavItem & { permission?: string })[] = [
+  { label: 'Mijn kinderen', href: '/kinderen', icon: Baby },
+  {
+    label: 'Inhoud',
+    href: '/inhoud',
+    icon: Library,
+    permission: 'content:manage',
+  },
+]
 
 /** Everything under the Admin menu needs `admin:dashboard` */
 export const ADMIN_LINKS: NavItem[] = [

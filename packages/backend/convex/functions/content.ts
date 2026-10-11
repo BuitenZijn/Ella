@@ -120,7 +120,9 @@ export const seedState = internalQuery({
   handler: async ctx => ({
     dinosaurs: (await ctx.db.query('dinosaurs').collect()).map(d => d.number),
     planets: (await ctx.db.query('planets').collect()).map(p => p.number),
-    puzzleImages: (await ctx.db.query('puzzleImages').collect()).map(i => i.name),
+    puzzleImages: (await ctx.db.query('puzzleImages').collect()).map(
+      i => i.name,
+    ),
   }),
 })
 
@@ -133,11 +135,16 @@ export const deleteUnusedFiles = internalMutation({
   returns: v.number(),
   handler: async (ctx, { olderThanMinutes = 60 }) => {
     const used = new Set<string>()
-    for (const d of await ctx.db.query('dinosaurs').collect()) if (d.image) used.add(d.image)
-    for (const p of await ctx.db.query('planets').collect()) if (p.image) used.add(p.image)
-    for (const i of await ctx.db.query('puzzleImages').collect()) used.add(i.image)
-    for (const u of await ctx.db.query('users').collect()) if (u.image) used.add(u.image)
-    for (const c of await ctx.db.query('storageClaims').collect()) used.add(c.storageId)
+    for (const d of await ctx.db.query('dinosaurs').collect())
+      if (d.image) used.add(d.image)
+    for (const p of await ctx.db.query('planets').collect())
+      if (p.image) used.add(p.image)
+    for (const i of await ctx.db.query('puzzleImages').collect())
+      used.add(i.image)
+    for (const u of await ctx.db.query('users').collect())
+      if (u.image) used.add(u.image)
+    for (const c of await ctx.db.query('storageClaims').collect())
+      used.add(c.storageId)
     const cutoff = Date.now() - olderThanMinutes * 60 * 1000
     let deleted = 0
     for (const file of await ctx.db.system.query('_storage').collect()) {
@@ -192,10 +199,12 @@ export const seedCraft = internalMutation({
   },
   returns: v.null(),
   handler: async (ctx, craft) => {
-    const same = (await ctx.db
-      .query('crafts')
-      .withIndex('by_category', q => q.eq('category', craft.category))
-      .collect()).some(c => c.title === craft.title)
+    const same = (
+      await ctx.db
+        .query('crafts')
+        .withIndex('by_category', q => q.eq('category', craft.category))
+        .collect()
+    ).some(c => c.title === craft.title)
     if (same) throw new Error(`craft "${craft.title}" already exists`)
     const now = Date.now()
     await ctx.db.insert('crafts', { ...craft, createdAt: now, updatedAt: now })
@@ -204,13 +213,24 @@ export const seedCraft = internalMutation({
 })
 
 export const seedMemoryTheme = internalMutation({
-  args: { name: v.string(), emoji: v.string(), emojis: v.array(v.string()), active: v.boolean() },
+  args: {
+    name: v.string(),
+    emoji: v.string(),
+    emojis: v.array(v.string()),
+    active: v.boolean(),
+  },
   returns: v.null(),
   handler: async (ctx, theme) => {
-    const same = (await ctx.db.query('memoryThemes').collect()).some(t => t.name === theme.name)
+    const same = (await ctx.db.query('memoryThemes').collect()).some(
+      t => t.name === theme.name,
+    )
     if (same) throw new Error(`memory theme "${theme.name}" already exists`)
     const now = Date.now()
-    await ctx.db.insert('memoryThemes', { ...theme, createdAt: now, updatedAt: now })
+    await ctx.db.insert('memoryThemes', {
+      ...theme,
+      createdAt: now,
+      updatedAt: now,
+    })
     return null
   },
 })
@@ -223,7 +243,9 @@ export const seedPuzzleImage = internalMutation({
   args: { name: v.string(), image: v.id('_storage'), active: v.boolean() },
   returns: v.boolean(),
   handler: async (ctx, row) => {
-    const same = (await ctx.db.query('puzzleImages').collect()).some(i => i.name === row.name)
+    const same = (await ctx.db.query('puzzleImages').collect()).some(
+      i => i.name === row.name,
+    )
     if (same) {
       await ctx.storage.delete(row.image)
       return false
@@ -235,7 +257,11 @@ export const seedPuzzleImage = internalMutation({
 
 /** The multiplication grid's settings; only set when there are none yet. */
 export const seedMaaltafelSettings = internalMutation({
-  args: { gridSize: v.number(), blanksPerRound: v.number(), bombChance: v.number() },
+  args: {
+    gridSize: v.number(),
+    blanksPerRound: v.number(),
+    bombChance: v.number(),
+  },
   returns: v.null(),
   handler: async (ctx, maaltafel) => {
     const existing = await ctx.db
@@ -243,7 +269,11 @@ export const seedMaaltafelSettings = internalMutation({
       .withIndex('by_game', q => q.eq('game', 'maaltafel_puzzel'))
       .first()
     if (!existing) {
-      await ctx.db.insert('gameSettings', { game: 'maaltafel_puzzel', maaltafel, updatedAt: Date.now() })
+      await ctx.db.insert('gameSettings', {
+        game: 'maaltafel_puzzel',
+        maaltafel,
+        updatedAt: Date.now(),
+      })
     }
     return null
   },

@@ -32,7 +32,20 @@ export const GAME_EMOJI: Record<Game, string> = {
 }
 
 /** Child profile pictures: emoji, so no photos of children are stored. */
-export const CHILD_AVATARS = ['🦊', '🐻', '🐼', '🐸', '🦁', '🐯', '🐨', '🐰', '🦄', '🐢', '🐙', '🦉'] as const
+export const CHILD_AVATARS = [
+  '🦊',
+  '🐻',
+  '🐼',
+  '🐸',
+  '🦁',
+  '🐯',
+  '🐨',
+  '🐰',
+  '🦄',
+  '🐢',
+  '🐙',
+  '🦉',
+] as const
 
 export function randomInt(random: Random, min: number, max: number): number {
   return Math.floor(random() * (max - min + 1)) + min
@@ -88,13 +101,18 @@ export function pickBlanks(
 }
 
 /** The up to 8 cells around a cell, inside the grid. */
-export function neighbours(row: number, col: number, gridSize: number): [number, number][] {
+export function neighbours(
+  row: number,
+  col: number,
+  gridSize: number,
+): [number, number][] {
   const result: [number, number][] = []
   for (let dr = -1; dr <= 1; dr++) {
     for (let dc = -1; dc <= 1; dc++) {
       const r = row + dr
       const c = col + dc
-      if ((dr || dc) && r >= 0 && c >= 0 && r < gridSize && c < gridSize) result.push([r, c])
+      if ((dr || dc) && r >= 0 && c >= 0 && r < gridSize && c < gridSize)
+        result.push([r, c])
     }
   }
   return result
@@ -127,21 +145,54 @@ export interface MathLevel {
 
 export const DEFAULT_MATH_LEVELS: MathLevel[] = [
   {
-    id: 'easy', label: 'Makkelijk', emoji: '🟢', minNumber: 1, maxNumber: 20,
-    addition: true, subtraction: true, multiplication: false, division: false, fractions: false,
-    questionsPerRound: 10, timeLimitSeconds: 30, pointsPerCorrect: 10, speedBonus: 5,
+    id: 'easy',
+    label: 'Makkelijk',
+    emoji: '🟢',
+    minNumber: 1,
+    maxNumber: 20,
+    addition: true,
+    subtraction: true,
+    multiplication: false,
+    division: false,
+    fractions: false,
+    questionsPerRound: 10,
+    timeLimitSeconds: 30,
+    pointsPerCorrect: 10,
+    speedBonus: 5,
     starThresholds: [50, 75, 90],
   },
   {
-    id: 'medium', label: 'Gemiddeld', emoji: '🟡', minNumber: 1, maxNumber: 50,
-    addition: true, subtraction: true, multiplication: true, division: true, fractions: false,
-    questionsPerRound: 15, timeLimitSeconds: 20, pointsPerCorrect: 15, speedBonus: 10,
+    id: 'medium',
+    label: 'Gemiddeld',
+    emoji: '🟡',
+    minNumber: 1,
+    maxNumber: 50,
+    addition: true,
+    subtraction: true,
+    multiplication: true,
+    division: true,
+    fractions: false,
+    questionsPerRound: 15,
+    timeLimitSeconds: 20,
+    pointsPerCorrect: 15,
+    speedBonus: 10,
     starThresholds: [50, 75, 90],
   },
   {
-    id: 'hard', label: 'Moeilijk', emoji: '🔴', minNumber: 1, maxNumber: 100,
-    addition: true, subtraction: true, multiplication: true, division: true, fractions: true,
-    questionsPerRound: 20, timeLimitSeconds: 15, pointsPerCorrect: 20, speedBonus: 15,
+    id: 'hard',
+    label: 'Moeilijk',
+    emoji: '🔴',
+    minNumber: 1,
+    maxNumber: 100,
+    addition: true,
+    subtraction: true,
+    multiplication: true,
+    division: true,
+    fractions: true,
+    questionsPerRound: 20,
+    timeLimitSeconds: 15,
+    pointsPerCorrect: 20,
+    speedBonus: 15,
     starThresholds: [50, 75, 90],
   },
 ]
@@ -187,24 +238,38 @@ export function generateExercise(level: MathLevel, random: Random): Exercise {
     b = randomInt(random, 1, Math.min(12, max))
     a = b * randomInt(random, 1, Math.max(1, Math.floor(max / b)))
   }
-  const answer = op === '+' ? a + b : op === '-' ? a - b : op === '×' ? a * b : a / b
+  const answer =
+    op === '+' ? a + b : op === '-' ? a - b : op === '×' ? a * b : a / b
   return { text: `${a} ${op} ${b}`, answer: round2(answer) }
 }
 
 /** Typed answers accept a comma as decimal sign. */
 export function isRightAnswer(exercise: Exercise, typed: string): boolean {
   const value = Number(typed.trim().replace(',', '.'))
-  return typed.trim() !== '' && Number.isFinite(value) && Math.abs(value - exercise.answer) < 0.01
+  return (
+    typed.trim() !== '' &&
+    Number.isFinite(value) &&
+    Math.abs(value - exercise.answer) < 0.01
+  )
 }
 
-export function exercisePoints(level: MathLevel, right: boolean, seconds: number): number {
+export function exercisePoints(
+  level: MathLevel,
+  right: boolean,
+  seconds: number,
+): number {
   if (!right) return 0
-  const fast = level.timeLimitSeconds > 0 && seconds <= level.timeLimitSeconds / 2
+  const fast =
+    level.timeLimitSeconds > 0 && seconds <= level.timeLimitSeconds / 2
   return level.pointsPerCorrect + (fast ? level.speedBonus : 0)
 }
 
 /** 0 to 3 stars for the share of right answers. */
-export function starsFor(rightCount: number, total: number, thresholds: [number, number, number]): number {
+export function starsFor(
+  rightCount: number,
+  total: number,
+  thresholds: [number, number, number],
+): number {
   const pct = total > 0 ? (rightCount / total) * 100 : 0
   return thresholds.filter(t => pct >= t).length
 }
@@ -269,7 +334,8 @@ export const PUZZLE_SIZES = [3, 4, 5, 6, 7] as const
 export function shuffledBoard(size: number, random: Random): number[] {
   const solved = Array.from({ length: size * size }, (_, i) => i)
   const board = shuffle(solved, random)
-  if (isSolved(board) && board.length > 1) [board[0], board[1]] = [board[1], board[0]]
+  if (isSolved(board) && board.length > 1)
+    [board[0], board[1]] = [board[1], board[0]]
   return board
 }
 
@@ -277,7 +343,30 @@ export function isSolved(board: readonly number[]): boolean {
   return board.every((tile, i) => tile === i)
 }
 
-export function swapTiles(board: readonly number[], a: number, b: number): number[] {
+/** 3 stars within one move per tile, 2 within two, else 1. */
+export function puzzleStars(moves: number, size: number): number {
+  const tiles = size * size
+  return moves <= tiles ? 3 : moves <= tiles * 2 ? 2 : 1
+}
+
+/** A planet's symbol on the puzzle's picker, by its number. */
+export const PLANET_EMOJI: Record<number, string> = {
+  1: '☿️',
+  2: '♀️',
+  3: '🌍',
+  4: '🔴',
+  5: '🟠',
+  6: '🪐',
+  7: '🔵',
+  8: '💙',
+  9: '⚪',
+}
+
+export function swapTiles(
+  board: readonly number[],
+  a: number,
+  b: number,
+): number[] {
   const next = [...board]
   ;[next[a], next[b]] = [next[b], next[a]]
   return next
@@ -298,10 +387,9 @@ export interface DinoQuestion<T> {
  * One question per dinosaur with a picture, in random order; the wrong
  * choices come from all dinosaurs (also those without a picture).
  */
-export function dinoQuestions<T extends { name: string; imageUrl: string | null }>(
-  dinos: readonly T[],
-  random: Random,
-): DinoQuestion<T>[] {
+export function dinoQuestions<
+  T extends { name: string; imageUrl: string | null },
+>(dinos: readonly T[], random: Random): DinoQuestion<T>[] {
   return shuffle(
     dinos.filter(d => d.imageUrl),
     random,

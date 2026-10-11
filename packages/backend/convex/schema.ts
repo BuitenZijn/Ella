@@ -187,7 +187,11 @@ export default defineSchema({
   gameSettings: defineTable({
     game: v.union(v.literal('maaltafel_puzzel'), v.literal('rekenoefeningen')),
     maaltafel: v.optional(
-      v.object({ gridSize: v.number(), blanksPerRound: v.number(), bombChance: v.number() }),
+      v.object({
+        gridSize: v.number(),
+        blanksPerRound: v.number(),
+        bombChance: v.number(),
+      }),
     ),
     mathLevels: v.optional(v.array(mathLevelValidator)),
     updatedAt: v.number(),

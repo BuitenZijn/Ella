@@ -16,10 +16,7 @@ import { requirePermission } from '../lib/auth'
 import { permanentError } from '../lib/errors'
 import { CLAIM_WINDOW_MS } from '../lib/storageClaims'
 import { youtubeVideoId } from '../lib/youtube'
-import {
-  craftCategoryValidator,
-  mathLevelValidator,
-} from '../schema'
+import { craftCategoryValidator, mathLevelValidator } from '../schema'
 
 const tableValidator = v.union(v.literal('dinosaurs'), v.literal('planets'))
 
@@ -31,7 +28,10 @@ const MEMORY_EMOJI_MAX = 40
 function text(value: string, label: string, max = TEXT_MAX, required = true) {
   const t = value.trim()
   if ((required && !t) || t.length > max) {
-    throw permanentError('INVALID_ARGUMENT', `${label}: vul 1 tot ${max} tekens in.`)
+    throw permanentError(
+      'INVALID_ARGUMENT',
+      `${label}: vul 1 tot ${max} tekens in.`,
+    )
   }
   return t
 }
@@ -39,7 +39,8 @@ function text(value: string, label: string, max = TEXT_MAX, required = true) {
 /** A picture uploaded in the last day that nobody has claimed. */
 async function requireFreshUpload(ctx: MutationCtx, storageId: Id<'_storage'>) {
   const blob = await ctx.db.system.get(storageId)
-  if (!blob) throw permanentError('NOT_FOUND', 'Upload niet gevonden. Probeer opnieuw.')
+  if (!blob)
+    throw permanentError('NOT_FOUND', 'Upload niet gevonden. Probeer opnieuw.')
   const claimed = await ctx.db
     .query('storageClaims')
     .withIndex('by_storage_id', q => q.eq('storageId', storageId))
@@ -57,7 +58,8 @@ async function swapImage(
 ) {
   if (newImage === oldImage) return
   if (newImage) await requireFreshUpload(ctx, newImage)
-  if (oldImage && (await ctx.db.system.get(oldImage))) await ctx.storage.delete(oldImage)
+  if (oldImage && (await ctx.db.system.get(oldImage)))
+    await ctx.storage.delete(oldImage)
 }
 
 export const generateUploadUrl = mutation({
@@ -79,7 +81,8 @@ const entryArgs = {
   scientificName: v.string(),
   description: v.string(),
   funFact: v.string(),
-  image: v.optional(v.id('_storage')),
+  /** Left out: keep the picture; null: remove it; an id: a new upload */
+  image: v.optional(v.union(v.id('_storage'), v.null())),
 }
 
 function checkedEntry(entry: {
@@ -89,13 +92,22 @@ function checkedEntry(entry: {
   description: string
   funFact: string
 }) {
-  if (!Number.isInteger(entry.number) || entry.number < 1 || entry.number > 9999) {
+  if (
+    !Number.isInteger(entry.number) ||
+    entry.number < 1 ||
+    entry.number > 9999
+  ) {
     throw permanentError('INVALID_ARGUMENT', 'Kies een nummer van 1 tot 9999.')
   }
   return {
     number: entry.number,
     name: text(entry.name, 'Naam', NAME_MAX),
-    scientificName: text(entry.scientificName, 'Wetenschappelijke naam', NAME_MAX, false),
+    scientificName: text(
+      entry.scientificName,
+      'Wetenschappelijke naam',
+      NAME_MAX,
+      false,
+    ),
     description: text(entry.description, 'Beschrijving'),
     funFact: text(entry.funFact, 'Weetje', TEXT_MAX, false),
   }
@@ -116,7 +128,10 @@ export const saveEntry = mutation({
       .withIndex('by_number', q => q.eq('number', checked.number))
       .first()
     if (sameNumber && sameNumber._id !== id) {
-      throw permanentError('INVALID_ARGUMENT', `Nummer ${checked.number} is al in gebruik.`)
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        `Nummer ${checked.number} is al in gebruik.`,
+      )
     }
     const now = Date.now()
     if (id) {
@@ -124,18 +139,28 @@ export const saveEntry = mutation({
       if (!existing || ctx.db.normalizeId(table, id) === null) {
         throw permanentError('NOT_FOUND', 'Dit item bestaat niet (meer).')
       }
-      await swapImage(ctx, existing.image, image)
-      await ctx.db.patch(id, { ...checked, image, updatedAt: now })
+      const newImage =
+        image === undefined ? existing.image : (image ?? undefined)
+      await swapImage(ctx, existing.image, newImage)
+      await ctx.db.patch(id, { ...checked, image: newImage, updatedAt: now })
     } else {
       if (image) await requireFreshUpload(ctx, image)
-      await ctx.db.insert(table, { ...checked, image, createdAt: now, updatedAt: now })
+      await ctx.db.insert(table, {
+        ...checked,
+        image: image ?? undefined,
+        createdAt: now,
+        updatedAt: now,
+      })
     }
     return null
   },
 })
 
 export const removeEntry = mutation({
-  args: { table: tableValidator, id: v.union(v.id('dinosaurs'), v.id('planets')) },
+  args: {
+    table: tableValidator,
+    id: v.union(v.id('dinosaurs'), v.id('planets')),
+  },
   returns: v.null(),
   handler: async (ctx, { table, id }) => {
     await requirePermission(ctx, 'content:manage')
@@ -175,7 +200,8 @@ export const saveCraft = mutation({
       updatedAt: Date.now(),
     }
     if (id) {
-      if (!(await ctx.db.get(id))) throw permanentError('NOT_FOUND', 'Deze video bestaat niet (meer).')
+      if (!(await ctx.db.get(id)))
+        throw permanentError('NOT_FOUND', 'Deze video bestaat niet (meer).')
       await ctx.db.patch(id, row)
     } else {
       await ctx.db.insert('crafts', { ...row, createdAt: row.updatedAt })
@@ -226,7 +252,10 @@ export const saveMemoryTheme = mutation({
       )
     }
     if (emojis.some(e => e.length > 16)) {
-      throw permanentError('INVALID_ARGUMENT', 'Gebruik enkel emoji, één per vakje.')
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        'Gebruik enkel emoji, één per vakje.',
+      )
     }
     const row = {
       name: text(theme.name, 'Naam', NAME_MAX),
@@ -236,7 +265,8 @@ export const saveMemoryTheme = mutation({
       updatedAt: Date.now(),
     }
     if (id) {
-      if (!(await ctx.db.get(id))) throw permanentError('NOT_FOUND', 'Dit thema bestaat niet (meer).')
+      if (!(await ctx.db.get(id)))
+        throw permanentError('NOT_FOUND', 'Dit thema bestaat niet (meer).')
       await ctx.db.patch(id, row)
     } else {
       await ctx.db.insert('memoryThemes', { ...row, createdAt: row.updatedAt })
@@ -265,7 +295,10 @@ export const listPuzzleImages = query({
     await requirePermission(ctx, 'content:manage')
     const rows = await ctx.db.query('puzzleImages').collect()
     return await Promise.all(
-      rows.map(async r => ({ ...r, imageUrl: await ctx.storage.getUrl(r.image) })),
+      rows.map(async r => ({
+        ...r,
+        imageUrl: await ctx.storage.getUrl(r.image),
+      })),
     )
   },
 })
@@ -291,7 +324,8 @@ export const setPuzzleImageActive = mutation({
   returns: v.null(),
   handler: async (ctx, { id, active }) => {
     await requirePermission(ctx, 'content:manage')
-    if (!(await ctx.db.get(id))) throw permanentError('NOT_FOUND', 'Deze afbeelding bestaat niet (meer).')
+    if (!(await ctx.db.get(id)))
+      throw permanentError('NOT_FOUND', 'Deze afbeelding bestaat niet (meer).')
     await ctx.db.patch(id, { active })
     return null
   },
@@ -317,7 +351,10 @@ export const removePuzzleImage = mutation({
 async function upsertSettings(
   ctx: MutationCtx,
   game: 'maaltafel_puzzel' | 'rekenoefeningen',
-  patch: { maaltafel?: { gridSize: number; blanksPerRound: number; bombChance: number }; mathLevels?: typeof mathLevelValidator.type[] },
+  patch: {
+    maaltafel?: { gridSize: number; blanksPerRound: number; bombChance: number }
+    mathLevels?: (typeof mathLevelValidator.type)[]
+  },
 ) {
   const existing = await ctx.db
     .query('gameSettings')
@@ -329,17 +366,28 @@ async function upsertSettings(
 }
 
 export const saveMaaltafelSettings = mutation({
-  args: { gridSize: v.number(), blanksPerRound: v.number(), bombChance: v.number() },
+  args: {
+    gridSize: v.number(),
+    blanksPerRound: v.number(),
+    bombChance: v.number(),
+  },
   returns: v.null(),
   handler: async (ctx, settings) => {
     await requirePermission(ctx, 'content:manage')
     const { gridSize, blanksPerRound, bombChance } = settings
     if (
-      !Number.isInteger(gridSize) || gridSize < 3 || gridSize > 12 ||
-      !Number.isInteger(blanksPerRound) || blanksPerRound < 1 || blanksPerRound > gridSize * gridSize ||
+      !Number.isInteger(gridSize) ||
+      gridSize < 3 ||
+      gridSize > 12 ||
+      !Number.isInteger(blanksPerRound) ||
+      blanksPerRound < 1 ||
+      blanksPerRound > gridSize * gridSize ||
       !(bombChance >= 0 && bombChance <= 1)
     ) {
-      throw permanentError('INVALID_ARGUMENT', 'Ongeldige instellingen voor de maaltafelpuzzel.')
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        'Ongeldige instellingen voor de maaltafelpuzzel.',
+      )
     }
     await upsertSettings(ctx, 'maaltafel_puzzel', { maaltafel: settings })
     return null
@@ -356,18 +404,36 @@ export const saveMathLevels = mutation({
     }
     for (const l of levels) {
       const ok =
-        l.id.trim() && l.label.trim() &&
-        Number.isInteger(l.minNumber) && Number.isInteger(l.maxNumber) &&
-        l.minNumber >= 0 && l.maxNumber >= l.minNumber && l.maxNumber <= 10_000 &&
-        Number.isInteger(l.questionsPerRound) && l.questionsPerRound >= 1 && l.questionsPerRound <= 100 &&
-        l.timeLimitSeconds >= 0 && l.timeLimitSeconds <= 600 &&
-        l.pointsPerCorrect >= 0 && l.speedBonus >= 0 &&
+        l.id.trim() &&
+        l.label.trim() &&
+        Number.isInteger(l.minNumber) &&
+        Number.isInteger(l.maxNumber) &&
+        l.minNumber >= 0 &&
+        l.maxNumber >= l.minNumber &&
+        l.maxNumber <= 10_000 &&
+        Number.isInteger(l.questionsPerRound) &&
+        l.questionsPerRound >= 1 &&
+        l.questionsPerRound <= 100 &&
+        l.timeLimitSeconds >= 0 &&
+        l.timeLimitSeconds <= 600 &&
+        l.pointsPerCorrect >= 0 &&
+        l.speedBonus >= 0 &&
         l.starThresholds.length === 3 &&
-        l.starThresholds.every((t, i) => t >= 0 && t <= 100 && (i === 0 || t >= l.starThresholds[i - 1]))
-      if (!ok) throw permanentError('INVALID_ARGUMENT', `Niveau "${l.label}" klopt niet.`)
+        l.starThresholds.every(
+          (t, i) =>
+            t >= 0 && t <= 100 && (i === 0 || t >= l.starThresholds[i - 1]),
+        )
+      if (!ok)
+        throw permanentError(
+          'INVALID_ARGUMENT',
+          `Niveau "${l.label}" klopt niet.`,
+        )
     }
     if (new Set(levels.map(l => l.id)).size !== levels.length) {
-      throw permanentError('INVALID_ARGUMENT', 'Elk niveau heeft een eigen id nodig.')
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        'Elk niveau heeft een eigen id nodig.',
+      )
     }
     await upsertSettings(ctx, 'rekenoefeningen', { mathLevels: levels })
     return null

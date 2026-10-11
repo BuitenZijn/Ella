@@ -18,7 +18,10 @@ const NAME_MAX = 30
 const RECENT_SCORES = 20
 
 /** The child, if it belongs to the signed-in parent. */
-async function requireOwnChild(ctx: QueryCtx | MutationCtx, childId: Id<'children'>) {
+async function requireOwnChild(
+  ctx: QueryCtx | MutationCtx,
+  childId: Id<'children'>,
+) {
   const parent = await getCurrentUser(ctx)
   const child = await ctx.db.get(childId)
   if (!child || child.parentId !== parent._id) {
@@ -30,7 +33,10 @@ async function requireOwnChild(ctx: QueryCtx | MutationCtx, childId: Id<'childre
 function checkedProfile(name: string, avatar: string) {
   const n = name.trim()
   if (!n || n.length > NAME_MAX) {
-    throw permanentError('INVALID_ARGUMENT', `Kies een naam van 1 tot ${NAME_MAX} tekens.`)
+    throw permanentError(
+      'INVALID_ARGUMENT',
+      `Kies een naam van 1 tot ${NAME_MAX} tekens.`,
+    )
   }
   if (!(CHILD_AVATARS as readonly string[]).includes(avatar)) {
     throw permanentError('INVALID_ARGUMENT', 'Kies een van de figuurtjes.')
@@ -59,7 +65,10 @@ export const addChild = mutation({
       .withIndex('by_parent', q => q.eq('parentId', parent._id))
       .collect()
     if (existing.length >= MAX_CHILDREN) {
-      throw permanentError('FORBIDDEN', `Je kan maximaal ${MAX_CHILDREN} kinderen toevoegen.`)
+      throw permanentError(
+        'FORBIDDEN',
+        `Je kan maximaal ${MAX_CHILDREN} kinderen toevoegen.`,
+      )
     }
     return await ctx.db.insert('children', {
       parentId: parent._id,
@@ -88,7 +97,9 @@ export const removeChild = mutation({
     for (const game of GAMES) {
       const scores = await ctx.db
         .query('scores')
-        .withIndex('by_child_and_game', q => q.eq('childId', childId).eq('game', game))
+        .withIndex('by_child_and_game', q =>
+          q.eq('childId', childId).eq('game', game),
+        )
         .collect()
       for (const score of scores) await ctx.db.delete(score._id)
     }
@@ -123,7 +134,10 @@ export const saveScore = mutation({
   returns: v.id('scores'),
   handler: async (ctx, { childId, game, ...score }) => {
     const { parent } = await requireOwnChild(ctx, childId)
-    if ((score.difficulty?.length ?? 0) > 40 || (score.subject?.length ?? 0) > 80) {
+    if (
+      (score.difficulty?.length ?? 0) > 40 ||
+      (score.subject?.length ?? 0) > 80
+    ) {
       throw permanentError('INVALID_ARGUMENT', 'Ongeldige score.')
     }
     return await ctx.db.insert('scores', {
@@ -153,7 +167,9 @@ export const childResults = query({
       GAMES.map(async game => {
         const scores = await ctx.db
           .query('scores')
-          .withIndex('by_child_and_game', q => q.eq('childId', childId).eq('game', game))
+          .withIndex('by_child_and_game', q =>
+            q.eq('childId', childId).eq('game', game),
+          )
           .order('desc')
           .take(RECENT_SCORES)
         return { game, played: scores.length, recent: scores }
@@ -179,7 +195,9 @@ export const familyBest = query({
     for (const child of children) {
       const scores = await ctx.db
         .query('scores')
-        .withIndex('by_child_and_game', q => q.eq('childId', child._id).eq('game', game))
+        .withIndex('by_child_and_game', q =>
+          q.eq('childId', child._id).eq('game', game),
+        )
         .collect()
       const best = new Map<string, (typeof scores)[number]>()
       for (const s of scores) {

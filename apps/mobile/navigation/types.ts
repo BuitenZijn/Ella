@@ -20,6 +20,14 @@ export type AuthStackParamList = {
 
 export type HomeStackParamList = {
   Home: undefined
+  AddChild: undefined
+  Crafts: undefined
+  Maaltafel: undefined
+  Math: undefined
+  DinoQuiz: undefined
+  Memory: undefined
+  PlanetPuzzle: undefined
+  Results: undefined
 }
 
 export type SettingsStackParamList = {

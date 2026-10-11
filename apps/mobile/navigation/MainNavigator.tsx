@@ -2,7 +2,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import type { RouteProp } from '@react-navigation/native'
-import { Home, Settings } from 'lucide-react-native'
+import { Gamepad2, Settings } from 'lucide-react-native'
 import { YStack, brandColors, neutralColors, monoFont } from '@ella/ui'
 import type { LucideIcon } from 'lucide-react-native'
 import type { MainTabParamList } from './types'
@@ -92,9 +92,14 @@ export default function MainNavigator() {
         name='HomeTab'
         component={HomeStack}
         options={({ route }) => ({
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Spelen',
           tabBarIcon: ({ color, size, focused }) => (
-            <TabIcon Icon={Home} color={color} size={size} focused={focused} />
+            <TabIcon
+              Icon={Gamepad2}
+              color={color}
+              size={size}
+              focused={focused}
+            />
           ),
           tabBarStyle: getTabBarStyle(route),
         })}
@@ -103,7 +108,7 @@ export default function MainNavigator() {
         name='SettingsTab'
         component={SettingsStack}
         options={({ route }) => ({
-          tabBarLabel: 'Settings',
+          tabBarLabel: 'Instellingen',
           tabBarIcon: ({ color, size, focused }) => (
             <TabIcon
               Icon={Settings}

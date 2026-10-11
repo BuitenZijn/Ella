@@ -68,9 +68,12 @@ describe('content management', () => {
       }),
       'INVALID_ARGUMENT',
     )
-    const crafts = await f.playerClient.query(api.functions.content.listCrafts, {
-      category: 'tekenen',
-    })
+    const crafts = await f.playerClient.query(
+      api.functions.content.listCrafts,
+      {
+        category: 'tekenen',
+      },
+    )
     expect(crafts.map(c => c.title)).toEqual(['Een kat'])
   })
 
@@ -98,28 +101,55 @@ describe('content management', () => {
       }),
       'INVALID_ARGUMENT',
     )
-    const themes = await f.playerClient.query(api.functions.content.listMemoryThemes, {})
+    const themes = await f.playerClient.query(
+      api.functions.content.listMemoryThemes,
+      {},
+    )
     expect(themes.map(t => t.name)).toEqual(['Dieren'])
 
-    const defaults = await f.playerClient.query(api.functions.content.gameSettings, {})
+    const defaults = await f.playerClient.query(
+      api.functions.content.gameSettings,
+      {},
+    )
     expect(defaults.maaltafel.gridSize).toBe(10)
     expect(defaults.mathLevels).toHaveLength(3)
-    await f.adminClient.mutation(api.functions.contentAdmin.saveMaaltafelSettings, {
+    await f.adminClient.mutation(
+      api.functions.contentAdmin.saveMaaltafelSettings,
+      {
+        gridSize: 5,
+        blanksPerRound: 4,
+        bombChance: 0,
+      },
+    )
+    const changed = await f.playerClient.query(
+      api.functions.content.gameSettings,
+      {},
+    )
+    expect(changed.maaltafel).toEqual({
       gridSize: 5,
       blanksPerRound: 4,
       bombChance: 0,
     })
-    const changed = await f.playerClient.query(api.functions.content.gameSettings, {})
-    expect(changed.maaltafel).toEqual({ gridSize: 5, blanksPerRound: 4, bombChance: 0 })
   })
 
   it('edits a card and refuses a taken number', async () => {
     const f = await userFixture()
     await f.t.mutation(internal.functions.content.seedEntry, dino)
-    await f.t.mutation(internal.functions.content.seedEntry, { ...dino, number: 2, name: 'Triceratops' })
-    const [rex] = await f.playerClient.query(api.functions.content.listDinosaurs, {})
+    await f.t.mutation(internal.functions.content.seedEntry, {
+      ...dino,
+      number: 2,
+      name: 'Triceratops',
+    })
+    const [rex] = await f.playerClient.query(
+      api.functions.content.listDinosaurs,
+      {},
+    )
     await expectPermanentError(
-      f.adminClient.mutation(api.functions.contentAdmin.saveEntry, { ...dino, id: rex._id, number: 2 }),
+      f.adminClient.mutation(api.functions.contentAdmin.saveEntry, {
+        ...dino,
+        id: rex._id,
+        number: 2,
+      }),
       'INVALID_ARGUMENT',
     )
     await f.adminClient.mutation(api.functions.contentAdmin.saveEntry, {
@@ -127,7 +157,10 @@ describe('content management', () => {
       id: rex._id,
       name: 'T-Rex',
     })
-    const cards = await f.playerClient.query(api.functions.content.listDinosaurs, {})
+    const cards = await f.playerClient.query(
+      api.functions.content.listDinosaurs,
+      {},
+    )
     expect(cards[0].name).toBe('T-Rex')
   })
 })

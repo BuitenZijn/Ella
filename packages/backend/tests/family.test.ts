@@ -11,9 +11,13 @@ describe('family', () => {
       avatar: '🦊',
     })
     expect(
-      (await f.authorClient.query(api.functions.family.listChildren, {})).map(c => c.name),
+      (await f.authorClient.query(api.functions.family.listChildren, {})).map(
+        c => c.name,
+      ),
     ).toEqual(['Ella'])
-    expect(await f.playerClient.query(api.functions.family.listChildren, {})).toEqual([])
+    expect(
+      await f.playerClient.query(api.functions.family.listChildren, {}),
+    ).toEqual([])
 
     await expectPermanentError(
       f.playerClient.mutation(api.functions.family.saveScore, {
@@ -24,11 +28,16 @@ describe('family', () => {
       'NOT_FOUND',
     )
     await expectPermanentError(
-      f.playerClient.query(api.functions.family.childResults, { childId: ella }),
+      f.playerClient.query(api.functions.family.childResults, {
+        childId: ella,
+      }),
       'NOT_FOUND',
     )
     await expectPermanentError(
-      f.authorClient.mutation(api.functions.family.addChild, { name: 'X', avatar: '📷' }),
+      f.authorClient.mutation(api.functions.family.addChild, {
+        name: 'X',
+        avatar: '📷',
+      }),
       'INVALID_ARGUMENT',
     )
   })
@@ -64,12 +73,17 @@ describe('family', () => {
       'INVALID_ARGUMENT',
     )
 
-    const best = await f.authorClient.query(api.functions.family.familyBest, { game: 'memory' })
+    const best = await f.authorClient.query(api.functions.family.familyBest, {
+      game: 'memory',
+    })
     expect(best.map(b => [b.childName, b.timeSeconds])).toEqual([
       ['Ella', 40],
       ['Tom', 45],
     ])
-    const results = await f.authorClient.query(api.functions.family.childResults, { childId: ella })
+    const results = await f.authorClient.query(
+      api.functions.family.childResults,
+      { childId: ella },
+    )
     expect(results.games.find(g => g.game === 'memory')?.played).toBe(2)
   })
 
@@ -79,16 +93,23 @@ describe('family', () => {
       name: 'Ella',
       avatar: '🦊',
     })
-    await f.authorClient.mutation(api.functions.family.addChild, { name: 'Tom', avatar: '🐻' })
+    await f.authorClient.mutation(api.functions.family.addChild, {
+      name: 'Tom',
+      avatar: '🐻',
+    })
     await f.authorClient.mutation(api.functions.family.saveScore, {
       childId: ella,
       game: 'dino_quiz',
       timeSeconds: 20,
     })
-    await f.authorClient.mutation(api.functions.family.removeChild, { childId: ella })
+    await f.authorClient.mutation(api.functions.family.removeChild, {
+      childId: ella,
+    })
     expect(await f.t.run(ctx => ctx.db.query('scores').collect())).toEqual([])
 
-    await f.t.mutation(internal.functions.users.processAccountDeletion, { userId: f.author })
+    await f.t.mutation(internal.functions.users.processAccountDeletion, {
+      userId: f.author,
+    })
     expect(await f.t.run(ctx => ctx.db.query('children').collect())).toEqual([])
   })
 })

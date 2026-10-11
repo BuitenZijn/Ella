@@ -48,6 +48,8 @@ export {
   shuffledBoard,
   isSolved,
   swapTiles,
+  puzzleStars,
+  PLANET_EMOJI,
   DINO_CHOICES,
   dinoQuestions,
 } from './convex/lib/games'

@@ -10,6 +10,7 @@ import {
   isSolved,
   neighbours,
   pickBlanks,
+  puzzleStars,
   shuffledBoard,
   starsFor,
   swapTiles,
@@ -50,13 +51,16 @@ describe('rekenoefeningen', () => {
         if (ex.text.includes(' - ') && !ex.text.includes('/')) {
           expect(ex.answer).toBeGreaterThanOrEqual(0)
         }
-        if (ex.text.includes('÷')) expect(Number.isInteger(ex.answer)).toBe(true)
+        if (ex.text.includes('÷'))
+          expect(Number.isInteger(ex.answer)).toBe(true)
       }
     }
   })
 
   it('checks answers, adds a speed bonus and gives stars', () => {
-    expect(isRightAnswer({ text: '1/2 + 1/4', answer: 0.75 }, '0,75')).toBe(true)
+    expect(isRightAnswer({ text: '1/2 + 1/4', answer: 0.75 }, '0,75')).toBe(
+      true,
+    )
     expect(isRightAnswer({ text: '2 + 2', answer: 4 }, '')).toBe(false)
     const easy = DEFAULT_MATH_LEVELS[0]
     expect(exercisePoints(easy, true, 10)).toBe(15) // within half of 30 s
@@ -74,7 +78,10 @@ describe('memory', () => {
     const deck = buildMemoryDeck(emojis, 3, 9, seeded())!
     expect(deck).toHaveLength(9)
     const counts = Object.values(
-      deck.reduce<Record<string, number>>((acc, e) => ({ ...acc, [e]: (acc[e] ?? 0) + 1 }), {}),
+      deck.reduce<Record<string, number>>(
+        (acc, e) => ({ ...acc, [e]: (acc[e] ?? 0) + 1 }),
+        {},
+      ),
     )
     expect(counts).toEqual([3, 3, 3])
     expect(buildMemoryDeck(emojis, 2, 16, seeded())).toBeNull() // needs 8 kinds
@@ -86,9 +93,12 @@ describe('planetenpuzzel', () => {
     for (let seed = 1; seed < 50; seed++) {
       const board = shuffledBoard(3, seeded(seed))
       expect(isSolved(board)).toBe(false)
-      expect([...board].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8])
+      expect([...board].sort((a, b) => a - b)).toEqual([
+        0, 1, 2, 3, 4, 5, 6, 7, 8,
+      ])
     }
     expect(isSolved(swapTiles([1, 0, 2], 0, 1))).toBe(true)
+    expect([9, 18, 19].map(m => puzzleStars(m, 3))).toEqual([3, 2, 1])
   })
 })
 
@@ -101,7 +111,10 @@ describe('dinoquiz', () => {
       { name: 'Diplodocus', imageUrl: null },
     ]
     const questions = dinoQuestions(dinos, seeded())
-    expect(questions.map(q => q.dino.name).sort()).toEqual(['T-Rex', 'Triceratops'])
+    expect(questions.map(q => q.dino.name).sort()).toEqual([
+      'T-Rex',
+      'Triceratops',
+    ])
     for (const q of questions) {
       expect(q.choices).toHaveLength(3)
       expect(new Set(q.choices).size).toBe(3)

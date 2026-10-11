@@ -58,8 +58,9 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             <strong>Van het kind:</strong> alleen wat nodig is om te spelen: een
-            voornaam of bijnaam, en de scores en voortgang in de spelletjes.
-            Geen foto&rsquo;s, geen locatie, geen contactgegevens.
+            voornaam of bijnaam, een figuurtje (emoji), en de scores in de
+            spelletjes. Geen foto&rsquo;s, geen locatie, geen contactgegevens.
+            Ouders zien alleen de scores van hun eigen kinderen.
           </li>
           <li>
             <strong>Technisch:</strong> sessiegegevens om je aangemeld te
@@ -89,8 +90,9 @@ export default function PrivacyPolicyPage() {
           </li>
         </ul>
         <p>
-          Knutselfilmpjes worden van YouTube getoond in de privacyvriendelijke
-          modus (youtube-nocookie.com).
+          Ella laadt zelf niets van YouTube. Een knutselfilmpje openen gaat naar
+          de YouTube-app of -website, waar de regels van YouTube gelden. Laat
+          jonge kinderen dat best samen met een volwassene doen.
         </p>
       </Section>
 

@@ -182,7 +182,7 @@ function VerifyEmailContent() {
         />
         <FormCard>
           <YStack gap='$4' alignItems='center' padding='$4'>
-            <Text color='$gray11' size='$4' textAlign='center'>
+            <Text color='$color11' size='$4' textAlign='center'>
               Geen e-mailadres opgegeven. Registreer om een verificatiecode te
               krijgen.
             </Text>
@@ -288,7 +288,7 @@ function VerifyEmailContent() {
           </Button>
 
           <YStack gap='$2' alignItems='center'>
-            <Text color='$gray10' size='$3' textAlign='center'>
+            <Text color='$color11' size='$3' textAlign='center'>
               Geen code ontvangen?
             </Text>
             <Button

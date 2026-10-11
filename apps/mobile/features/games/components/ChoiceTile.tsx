@@ -1,9 +1,10 @@
 import React from 'react'
 import { Pressable } from 'react-native'
 import {
+  Theme,
   YStack,
   Text,
-  brandColors,
+  cardColors,
   neutralColors,
   semanticColors,
 } from '@ella/ui'
@@ -19,7 +20,10 @@ interface ChoiceTileProps {
   tone?: 'right' | 'wrong'
 }
 
-/** A big tappable tile: choosing a game, a level, an answer. */
+/**
+ * A big tappable tile: choosing a game, a level, an answer. Tiles are blue
+ * with white text; a right or wrong answer turns green or red.
+ */
 export function ChoiceTile({
   label,
   emoji,
@@ -31,12 +35,12 @@ export function ChoiceTile({
 }: ChoiceTileProps) {
   const background =
     tone === 'right'
-      ? semanticColors.success.background
+      ? semanticColors.success.main
       : tone === 'wrong'
-        ? semanticColors.error.background
+        ? semanticColors.error.main
         : selected
-          ? brandColors.primaryLight
-          : neutralColors.background.elevated
+          ? cardColors.hover
+          : cardColors.background
   return (
     <Pressable
       onPress={onPress}
@@ -50,39 +54,37 @@ export function ChoiceTile({
         opacity: pressed ? 0.8 : 1,
       })}
     >
-      <YStack
-        padding='$3'
-        minHeight={72}
-        borderRadius={16}
-        borderWidth={2}
-        borderColor={
-          tone === 'right'
-            ? semanticColors.success.border
-            : tone === 'wrong'
-              ? semanticColors.error.border
-              : selected
-                ? brandColors.primary
-                : neutralColors.border.subtle
-        }
-        backgroundColor={background}
-        alignItems='center'
-        justifyContent='center'
-        gap='$1'
-      >
-        {emoji && <Text fontSize={32}>{emoji}</Text>}
-        <Text size='$5' weight='bold' textAlign='center'>
-          {label}
-        </Text>
-        {sublabel && (
-          <Text
-            size='$3'
-            color={neutralColors.text.secondary}
-            textAlign='center'
-          >
-            {sublabel}
+      <Theme name='card'>
+        <YStack
+          padding='$3'
+          minHeight={72}
+          borderRadius={16}
+          borderWidth={2}
+          borderColor={
+            tone === 'right'
+              ? semanticColors.success.border
+              : tone === 'wrong'
+                ? semanticColors.error.border
+                : selected
+                  ? neutralColors.text.primary
+                  : cardColors.background
+          }
+          backgroundColor={background}
+          alignItems='center'
+          justifyContent='center'
+          gap='$1'
+        >
+          {emoji && <Text fontSize={32}>{emoji}</Text>}
+          <Text size='$5' weight='bold' textAlign='center'>
+            {label}
           </Text>
-        )}
-      </YStack>
+          {sublabel && (
+            <Text size='$3' variant='muted' textAlign='center'>
+              {sublabel}
+            </Text>
+          )}
+        </YStack>
+      </Theme>
     </Pressable>
   )
 }

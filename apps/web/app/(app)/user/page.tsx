@@ -259,11 +259,8 @@ export default function AccountPage() {
                     </Button>
                     <Button size='$3' variant='ghost' onPress={resetPhoto}>
                       <XStack gap='$2' alignItems='center'>
-                        <X size={14} color={neutralColors.text.secondary} />
-                        <ButtonText
-                          size='$3'
-                          color={neutralColors.text.secondary}
-                        >
+                        <X size={14} color='var(--color11)' />
+                        <ButtonText size='$3' color='$color11'>
                           Annuleren
                         </ButtonText>
                       </XStack>
@@ -290,7 +287,7 @@ export default function AccountPage() {
               {!isEditing && (
                 <Button size='$3' variant='primary' onPress={handleEdit}>
                   <XStack gap='$2' alignItems='center'>
-                    <Edit2 size={16} color={neutralColors.text.inverse} />
+                    <Edit2 size={16} color='var(--onBrand)' />
                     <ButtonText size='$3'>Profiel bewerken</ButtonText>
                   </XStack>
                 </Button>
@@ -367,12 +364,8 @@ export default function AccountPage() {
 
               <YStack gap='$2'>
                 <XStack gap='$2' alignItems='center'>
-                  <Shield size={16} color={neutralColors.text.secondary} />
-                  <Paragraph
-                    fontSize={14}
-                    fontWeight='600'
-                    color={neutralColors.text.secondary}
-                  >
+                  <Shield size={16} color='var(--color11)' />
+                  <Paragraph fontSize={14} fontWeight='600' color='$color11'>
                     Rol
                   </Paragraph>
                 </XStack>
@@ -405,11 +398,8 @@ export default function AccountPage() {
                     disabled={isSaving}
                   >
                     <XStack gap='$2' alignItems='center'>
-                      <X size={16} color={neutralColors.text.secondary} />
-                      <Paragraph
-                        color={neutralColors.text.secondary}
-                        fontWeight='600'
-                      >
+                      <X size={16} color='var(--color11)' />
+                      <Paragraph color='$color11' fontWeight='600'>
                         Annuleren
                       </Paragraph>
                     </XStack>

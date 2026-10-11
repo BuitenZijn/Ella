@@ -7,8 +7,8 @@ import {
   ButtonText,
   Card,
   MonoText,
-  brandColors,
   neutralColors,
+  cardColors,
   Spinner,
 } from '@ella/ui'
 import { useNavigation } from '@react-navigation/native'
@@ -79,11 +79,11 @@ export function ChangePasswordScreen() {
               width={56}
               height={56}
               borderRadius={12}
-              backgroundColor={`${brandColors.primary}20`}
+              backgroundColor={cardColors.border}
               alignItems='center'
               justifyContent='center'
             >
-              <KeyRound size={28} color={brandColors.primary} />
+              <KeyRound size={28} color={cardColors.text} />
             </YStack>
 
             {sent ? (
@@ -126,7 +126,7 @@ export function ChangePasswordScreen() {
                     width='100%'
                   >
                     <YStack gap='$1' alignItems='center'>
-                      <Mail size={16} color={neutralColors.text.muted} />
+                      <Mail size={16} color={cardColors.textMuted} />
                       <MonoText size='$3' weight='medium'>
                         {email}
                       </MonoText>

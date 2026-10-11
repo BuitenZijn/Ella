@@ -79,7 +79,7 @@ export const FormLabelText = styled(Label, {
   name: 'FormLabelText',
   fontSize: 12,
   fontWeight: '600',
-  color: neutralColors.text.secondary,
+  color: '$color11',
   textTransform: 'uppercase',
   letterSpacing: 0.5,
 })

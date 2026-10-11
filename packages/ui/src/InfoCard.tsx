@@ -1,5 +1,5 @@
-import { styled, GetProps, YStack, Paragraph } from 'tamagui'
-import { semanticColors, neutralColors } from './colors'
+import { styled, GetProps, YStack, Paragraph, Theme } from 'tamagui'
+import { semanticColors, cardColors } from './colors'
 
 /**
  * InfoCard - A card for displaying contextual information or alerts
@@ -21,7 +21,7 @@ import { semanticColors, neutralColors } from './colors'
  *   <InfoCardText variant="error">Error message here</InfoCardText>
  * </InfoCard>
  */
-export const InfoCard = styled(YStack, {
+const InfoCardFrame = styled(YStack, {
   name: 'InfoCard',
   padding: '$5',
   borderRadius: 12,
@@ -31,23 +31,23 @@ export const InfoCard = styled(YStack, {
   variants: {
     variant: {
       default: {
-        backgroundColor: neutralColors.background.elevated,
-        borderColor: neutralColors.border.default,
+        backgroundColor: cardColors.background,
+        borderColor: cardColors.background,
       },
       success: {
-        backgroundColor: semanticColors.success.background,
+        backgroundColor: semanticColors.success.surface,
         borderColor: semanticColors.success.border,
       },
       error: {
-        backgroundColor: semanticColors.error.background,
+        backgroundColor: semanticColors.error.surface,
         borderColor: semanticColors.error.border,
       },
       warning: {
-        backgroundColor: semanticColors.warning.background,
+        backgroundColor: semanticColors.warning.surface,
         borderColor: semanticColors.warning.border,
       },
       info: {
-        backgroundColor: semanticColors.info.background,
+        backgroundColor: semanticColors.info.surface,
         borderColor: semanticColors.info.border,
       },
     },
@@ -79,6 +79,20 @@ export const InfoCard = styled(YStack, {
     variant: 'default',
     size: '$4',
   },
+})
+
+/**
+ * The default InfoCard is a blue card; its contents use the `card` theme.
+ * The status variants are light boxes, so they keep the light theme even
+ * inside a blue card.
+ */
+export const InfoCard = InfoCardFrame.styleable(function InfoCard(props, ref) {
+  const blue = (props.variant ?? 'default') === 'default'
+  return (
+    <Theme name={blue ? 'card' : 'light'}>
+      <InfoCardFrame ref={ref} {...props} />
+    </Theme>
+  )
 })
 
 /**
@@ -125,7 +139,7 @@ export const InfoCardText = styled(Paragraph, {
   variants: {
     variant: {
       default: {
-        color: neutralColors.text.secondary,
+        color: '$color11',
       },
       success: {
         color: semanticColors.success.text,

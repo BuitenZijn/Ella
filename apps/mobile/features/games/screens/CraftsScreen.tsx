@@ -7,7 +7,8 @@ import {
   XStack,
   Text,
   LoadingSpinner,
-  brandColors,
+  Theme,
+  cardColors,
   neutralColors,
 } from '@ella/ui'
 import { AppShell } from '../../../components/shell'
@@ -89,32 +90,32 @@ export function CraftsScreen() {
                 )
               }
             >
-              <XStack
-                gap='$3'
-                padding='$2'
-                borderRadius={12}
-                borderWidth={1}
-                borderColor={neutralColors.border.subtle}
-                backgroundColor={neutralColors.background.elevated}
-                alignItems='center'
-              >
-                <YStack
-                  width={56}
-                  height={56}
+              <Theme name='card'>
+                <XStack
+                  gap='$3'
+                  padding='$2'
                   borderRadius={12}
-                  backgroundColor={brandColors.primaryLight}
+                  backgroundColor={cardColors.background}
                   alignItems='center'
-                  justifyContent='center'
                 >
-                  <Text fontSize={26}>▶️</Text>
-                </YStack>
-                <YStack flex={1} gap='$1'>
-                  <Text weight='bold'>{item.title}</Text>
-                  <Text size='$3' color={neutralColors.text.secondary}>
-                    ▶ Bekijk op YouTube
-                  </Text>
-                </YStack>
-              </XStack>
+                  <YStack
+                    width={56}
+                    height={56}
+                    borderRadius={12}
+                    backgroundColor={cardColors.border}
+                    alignItems='center'
+                    justifyContent='center'
+                  >
+                    <Text fontSize={26}>▶️</Text>
+                  </YStack>
+                  <YStack flex={1} gap='$1'>
+                    <Text weight='bold'>{item.title}</Text>
+                    <Text size='$3' variant='muted'>
+                      ▶ Bekijk op YouTube
+                    </Text>
+                  </YStack>
+                </XStack>
+              </Theme>
             </Pressable>
           )}
         />

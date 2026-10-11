@@ -19,6 +19,7 @@ import {
   YStack,
   brandColors,
   neutralColors,
+  cardColors,
   semanticColors,
 } from '@ella/ui'
 import { useAuthActions } from '@convex-dev/auth/react'
@@ -170,7 +171,7 @@ export function ResetPasswordScreen({ route, onComplete }: Props) {
             <YStack gap='$4'>
               <Card variant='outlined' size='$3'>
                 <XStack gap='$2' alignItems='center'>
-                  <Mail size={16} color={neutralColors.text.muted} />
+                  <Mail size={16} color={cardColors.textMuted} />
                   <Text size='$2' variant='muted' flex={1} selectable>
                     Nieuw wachtwoord voor {email}
                   </Text>

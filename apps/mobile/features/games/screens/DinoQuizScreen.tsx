@@ -14,6 +14,7 @@ import {
   LoadingSpinner,
   InfoCard,
   neutralColors,
+  cardColors,
 } from '@ella/ui'
 import { AppShell } from '../../../components/shell'
 import { ChoiceTile } from '../components/ChoiceTile'
@@ -109,7 +110,7 @@ function DinoGame({ dinos, onAgain }: { dinos: Dino[]; onAgain: () => void }) {
         height={240}
         borderRadius={16}
         overflow='hidden'
-        backgroundColor={neutralColors.background.elevated}
+        backgroundColor={cardColors.background}
       >
         <Image
           source={{ uri: question.dino.imageUrl ?? undefined }}

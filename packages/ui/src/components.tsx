@@ -1,5 +1,5 @@
-import { styled, GetProps, YStack } from 'tamagui'
-import { neutralColors, brandColors } from './colors'
+import { styled, GetProps, YStack, Theme } from 'tamagui'
+import { brandColors, cardColors } from './colors'
 
 /**
  * Card - Primary container component for the Xplorer design system.
@@ -7,10 +7,10 @@ import { neutralColors, brandColors } from './colors'
  * This is the main card component. Use it for all card-like containers.
  *
  * Variants:
- * - `default`: Elevated background with subtle border
- * - `outlined`: Transparent background with prominent border
- * - `highlight`: Primary brand border for emphasis
- * - `muted`: Hover background color (subdued)
+ * - `default`: Blue card; its contents use the `card` theme (white text)
+ * - `outlined`: Blue card with a light border (also tells nested cards apart)
+ * - `highlight`: Blue card with a white border for emphasis
+ * - `muted`: Darker blue card
  * - `success`: Green-tinted for success states
  * - `ghost`: No background or border (container only)
  *
@@ -28,32 +28,32 @@ import { neutralColors, brandColors } from './colors'
  * // Highlighted card
  * <Card variant="highlight">Important content</Card>
  */
-export const Card = styled(YStack, {
+const CardFrame = styled(YStack, {
   name: 'Card',
   borderRadius: 12,
   padding: '$4',
-  backgroundColor: neutralColors.background.elevated,
+  backgroundColor: cardColors.background,
   borderWidth: 1,
-  borderColor: neutralColors.border.default,
+  borderColor: cardColors.background,
 
   variants: {
     variant: {
       default: {
-        backgroundColor: neutralColors.background.elevated,
-        borderColor: neutralColors.border.default,
+        backgroundColor: cardColors.background,
+        borderColor: cardColors.background,
       },
       outlined: {
-        backgroundColor: 'transparent',
-        borderColor: neutralColors.border.default,
+        backgroundColor: cardColors.background,
+        borderColor: cardColors.border,
       },
       highlight: {
-        backgroundColor: neutralColors.background.elevated,
-        borderWidth: 1,
-        borderColor: brandColors.primary,
+        backgroundColor: cardColors.background,
+        borderWidth: 2,
+        borderColor: cardColors.text,
       },
       muted: {
-        backgroundColor: neutralColors.background.hover,
-        borderColor: neutralColors.border.default,
+        backgroundColor: cardColors.hover,
+        borderColor: cardColors.hover,
       },
       success: {
         backgroundColor: brandColors.secondaryLight,
@@ -65,7 +65,7 @@ export const Card = styled(YStack, {
         borderWidth: 0,
       },
       subtle: {
-        backgroundColor: neutralColors.background.elevated,
+        backgroundColor: cardColors.background,
         borderWidth: 0,
       },
     },
@@ -91,8 +91,8 @@ export const Card = styled(YStack, {
       true: {
         cursor: 'pointer',
         hoverStyle: {
-          backgroundColor: neutralColors.background.hover,
-          borderColor: brandColors.primary,
+          backgroundColor: cardColors.hover,
+          borderColor: cardColors.text,
         },
         pressStyle: {
           scale: 0.99,
@@ -106,6 +106,21 @@ export const Card = styled(YStack, {
     variant: 'default',
     size: '$4',
   },
+})
+
+/** Card variants drawn blue, whose contents use the `card` theme. */
+const BLUE_CARD_VARIANTS: ReadonlySet<string> = new Set([
+  'default',
+  'outlined',
+  'highlight',
+  'muted',
+  'subtle',
+])
+
+export const Card = CardFrame.styleable(function Card(props, ref) {
+  const frame = <CardFrame ref={ref} {...props} />
+  if (!BLUE_CARD_VARIANTS.has(props.variant ?? 'default')) return frame
+  return <Theme name='card'>{frame}</Theme>
 })
 
 export type CardProps = GetProps<typeof Card>

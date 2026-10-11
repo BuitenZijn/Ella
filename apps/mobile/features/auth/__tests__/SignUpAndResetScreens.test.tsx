@@ -77,6 +77,7 @@ jest.mock('@ella/ui', () => {
     brandColors: color,
     semanticColors: new Proxy({}, { get: () => color }),
     neutralColors: new Proxy({}, { get: () => color }),
+    cardColors: color,
   }
 })
 

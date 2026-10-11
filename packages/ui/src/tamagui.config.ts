@@ -1,8 +1,8 @@
 import { config } from '@tamagui/config/v3'
 import { createTamagui } from 'tamagui'
-import { neutralColors, brandColors } from './colors'
+import { neutralColors, brandColors, cardColors } from './colors'
 
-// The Ella light theme: cream pages, white cards, blue actions, pink text
+// The Ella light theme: cream pages, blue actions, pink text
 const ellaLight = {
   // Background colors
   background: neutralColors.background.page,
@@ -47,6 +47,52 @@ const ellaLight = {
 
   // Outline (for focus states)
   outlineColor: brandColors.primary,
+
+  // Brand fill (buttons, links) and the label on it
+  brand: brandColors.primary,
+  brandHover: brandColors.primaryHover,
+  onBrand: neutralColors.text.onFill,
+} as const
+
+// Inside cards and game tiles: blue surface, white text, white buttons with
+// a blue label. Applied with `<Theme name='card'>` (Card, FormCard and
+// InfoCard do this themselves).
+const ellaCard = {
+  ...ellaLight,
+  background: cardColors.background,
+  backgroundHover: cardColors.hover,
+  backgroundPress: cardColors.hover,
+  backgroundFocus: cardColors.hover,
+  backgroundStrong: cardColors.background,
+
+  color: cardColors.text,
+  colorHover: cardColors.text,
+  colorPress: cardColors.textSecondary,
+  colorFocus: cardColors.text,
+  color1: cardColors.textMuted,
+  color2: cardColors.textMuted,
+  color3: cardColors.textMuted,
+  color4: cardColors.textMuted,
+  color5: cardColors.textSecondary,
+  color6: cardColors.textSecondary,
+  color7: cardColors.textSecondary,
+  color8: cardColors.textSecondary,
+  color9: cardColors.textSecondary,
+  color10: cardColors.textSecondary,
+  color11: cardColors.textSecondary,
+  color12: cardColors.text,
+
+  borderColor: cardColors.border,
+  borderColorHover: cardColors.text,
+  borderColorFocus: cardColors.text,
+  borderColorPress: cardColors.text,
+
+  placeholderColor: cardColors.textMuted,
+  outlineColor: cardColors.text,
+
+  brand: cardColors.button,
+  brandHover: cardColors.buttonHover,
+  onBrand: cardColors.onButton,
 } as const
 
 const tamaguiConfig = createTamagui({
@@ -58,6 +104,8 @@ const tamaguiConfig = createTamagui({
     light: ellaLight,
     // Also set dark to light for consistency (the app is light-only)
     dark: ellaLight,
+    light_card: ellaCard,
+    dark_card: ellaCard,
   },
   defaultTheme: 'light',
 })

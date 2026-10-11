@@ -6,7 +6,6 @@ import {
   Text,
   Button,
   ButtonText,
-  Card,
   neutralColors,
   overlayColors,
   IconContainer,
@@ -79,9 +78,10 @@ export function SlideConfirmModal({
         alignItems='center'
         padding='$4'
       >
-        <Card
-          variant='outlined'
+        <YStack
           backgroundColor={neutralColors.background.page}
+          borderWidth={1}
+          borderColor={neutralColors.border.default}
           borderRadius={12}
           padding='$5'
           gap='$4'
@@ -124,7 +124,7 @@ export function SlideConfirmModal({
               <ButtonText variant='muted'>Annuleren</ButtonText>
             </Button>
           </XStack>
-        </Card>
+        </YStack>
       </YStack>
     </Modal>
   )

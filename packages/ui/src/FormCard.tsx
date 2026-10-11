@@ -1,17 +1,17 @@
-import { styled, Card as TamaguiCard, GetProps } from 'tamagui'
-import { neutralColors } from './colors'
+import { styled, Card as TamaguiCard, GetProps, Theme } from 'tamagui'
+import { cardColors } from './colors'
 
 /**
  * FormCard - Elevated card for forms (auth, settings, etc.)
- * Uses Digital Compass design system colors with shadow elevation.
+ * A blue card whose contents use the `card` theme (white text, white buttons).
  */
-export const FormCard = styled(TamaguiCard, {
+const FormCardFrame = styled(TamaguiCard, {
   name: 'FormCard',
   padding: '$6',
-  backgroundColor: neutralColors.background.elevated,
+  backgroundColor: cardColors.background,
   borderRadius: 12,
   borderWidth: 1,
-  borderColor: neutralColors.border.default,
+  borderColor: cardColors.background,
   elevation: 4,
   shadowColor: '#000',
   shadowRadius: 20,
@@ -37,6 +37,14 @@ export const FormCard = styled(TamaguiCard, {
   defaultVariants: {
     size: '$6',
   },
+})
+
+export const FormCard = FormCardFrame.styleable(function FormCard(props, ref) {
+  return (
+    <Theme name='card'>
+      <FormCardFrame ref={ref} {...props} />
+    </Theme>
+  )
 })
 
 export type FormCardProps = GetProps<typeof FormCard>

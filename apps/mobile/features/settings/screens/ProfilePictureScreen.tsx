@@ -9,6 +9,7 @@ import {
   Card,
   brandColors,
   neutralColors,
+  cardColors,
   Spinner,
 } from '@ella/ui'
 import { Image } from 'expo-image'
@@ -140,7 +141,7 @@ export function ProfilePictureScreen() {
               variant='outline'
               size='$4'
               onPress={pickFromGallery}
-              icon={<ImageIcon size={20} color={brandColors.primary} />}
+              icon={<ImageIcon size={20} color={cardColors.text} />}
             >
               <ButtonText variant='secondary' flex={1} textAlign='left'>
                 Kiezen uit galerij
@@ -150,7 +151,7 @@ export function ProfilePictureScreen() {
               variant='outline'
               size='$4'
               onPress={pickFromCamera}
-              icon={<Camera size={20} color={brandColors.primary} />}
+              icon={<Camera size={20} color={cardColors.text} />}
             >
               <ButtonText variant='secondary' flex={1} textAlign='left'>
                 Foto nemen
@@ -161,13 +162,9 @@ export function ProfilePictureScreen() {
                 variant='outline'
                 size='$4'
                 onPress={handleRemove}
-                icon={<Trash2 size={20} color={brandColors.destructive} />}
+                icon={<Trash2 size={20} color={cardColors.text} />}
               >
-                <ButtonText
-                  flex={1}
-                  textAlign='left'
-                  color={brandColors.destructive}
-                >
+                <ButtonText flex={1} textAlign='left'>
                   Selectie wissen
                 </ButtonText>
               </Button>

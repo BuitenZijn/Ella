@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { styled, GetProps, Button as TamaguiButton } from 'tamagui'
-import { brandColors, neutralColors } from './colors'
+import { brandColors } from './colors'
 import { DARK_INK_ON_FILL } from './fillInk'
 
 /** Variants whose background is a light brand fill (amber, teal, ember). */
@@ -11,16 +11,21 @@ const FILLED_VARIANTS: ReadonlySet<string> = new Set([
   'warning',
 ])
 
+/** Filled variants in the brand color, which turns white on a blue card. */
+const BRAND_VARIANTS: ReadonlySet<string> = new Set(['primary', 'warning'])
+
 /**
- * True inside a Button with a light brand fill. ButtonText reads it to
- * switch to dark ink: white on those fills is only 2–3:1. Web only; the
- * native app keeps white labels (see fillInk.native.ts).
+ * Set inside a filled Button: 'brand' for the brand fill (its label follows
+ * the theme, blue on a card), 'status' for the danger and success fills
+ * (white label). ButtonText reads it. Web only; the native app keeps its own
+ * labels (see fillInk.native.ts).
  */
-export const ButtonFillContext = createContext(false)
+export type ButtonFill = 'brand' | 'status' | false
+export const ButtonFillContext = createContext<ButtonFill>(false)
 
 const ButtonFrame = styled(TamaguiButton, {
   name: 'Button',
-  backgroundColor: brandColors.primary,
+  backgroundColor: '$brand',
   borderRadius: 10,
   height: 48,
   pressStyle: {
@@ -28,7 +33,7 @@ const ButtonFrame = styled(TamaguiButton, {
     scale: 0.98,
   },
   hoverStyle: {
-    backgroundColor: brandColors.primaryHover,
+    backgroundColor: '$brandHover',
   },
   disabledStyle: {
     opacity: 0.35,
@@ -60,14 +65,14 @@ const ButtonFrame = styled(TamaguiButton, {
     },
     variant: {
       primary: {
-        backgroundColor: brandColors.primary,
-        hoverStyle: { backgroundColor: brandColors.primaryHover },
+        backgroundColor: '$brand',
+        hoverStyle: { backgroundColor: '$brandHover' },
         pressStyle: { opacity: 0.9, scale: 0.98 },
       },
       secondary: {
         backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: brandColors.primary,
+        borderColor: '$brand',
         hoverStyle: { backgroundColor: brandColors.primaryLight },
         pressStyle: { opacity: 0.9, scale: 0.98 },
       },
@@ -82,19 +87,19 @@ const ButtonFrame = styled(TamaguiButton, {
         pressStyle: { opacity: 0.9, scale: 0.98 },
       },
       warning: {
-        backgroundColor: brandColors.primary,
-        hoverStyle: { backgroundColor: brandColors.primaryHover },
+        backgroundColor: '$brand',
+        hoverStyle: { backgroundColor: '$brandHover' },
         pressStyle: { opacity: 0.9, scale: 0.98 },
       },
       ghost: {
-        backgroundColor: neutralColors.background.hover,
-        hoverStyle: { backgroundColor: neutralColors.background.elevated },
+        backgroundColor: '$backgroundHover',
+        hoverStyle: { backgroundColor: '$backgroundStrong' },
         pressStyle: { opacity: 0.9, scale: 0.98 },
       },
       outline: {
         backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: brandColors.primary,
+        borderColor: '$brand',
         hoverStyle: { backgroundColor: brandColors.primaryLight },
         pressStyle: { opacity: 0.9, scale: 0.98 },
       },
@@ -108,9 +113,9 @@ const ButtonFrame = styled(TamaguiButton, {
       'ghost-row': {
         backgroundColor: 'transparent',
         borderWidth: 0,
-        hoverStyle: { backgroundColor: neutralColors.background.hover },
+        hoverStyle: { backgroundColor: '$backgroundHover' },
         pressStyle: {
-          backgroundColor: neutralColors.background.hover,
+          backgroundColor: '$backgroundHover',
           opacity: 0.9,
           scale: 0.99,
         },
@@ -137,10 +142,12 @@ const ButtonFrame = styled(TamaguiButton, {
  * white labels.
  */
 export const Button = ButtonFrame.styleable(function Button(props, ref) {
-  const filled =
+  const variant = props.variant ?? 'primary'
+  const filled: ButtonFill =
     DARK_INK_ON_FILL &&
-    FILLED_VARIANTS.has(props.variant ?? 'primary') &&
-    props.backgroundColor === undefined
+    FILLED_VARIANTS.has(variant) &&
+    props.backgroundColor === undefined &&
+    (BRAND_VARIANTS.has(variant) ? 'brand' : 'status')
   return (
     <ButtonFillContext.Provider value={filled}>
       <ButtonFrame ref={ref} {...props} />
@@ -156,22 +163,22 @@ export const IconButton = styled(TamaguiButton, {
   name: 'IconButton',
   size: '$3',
   borderRadius: '$3',
-  backgroundColor: neutralColors.background.hover,
+  backgroundColor: '$backgroundHover',
   hoverStyle: {
-    backgroundColor: neutralColors.background.elevated,
+    backgroundColor: '$backgroundStrong',
   },
   pressStyle: {
-    backgroundColor: neutralColors.background.elevated,
+    backgroundColor: '$backgroundStrong',
     opacity: 0.8,
   },
 
   variants: {
     variant: {
       ghost: {
-        backgroundColor: neutralColors.background.hover,
-        hoverStyle: { backgroundColor: neutralColors.background.elevated },
+        backgroundColor: '$backgroundHover',
+        hoverStyle: { backgroundColor: '$backgroundStrong' },
         pressStyle: {
-          backgroundColor: neutralColors.background.elevated,
+          backgroundColor: '$backgroundStrong',
           opacity: 0.8,
         },
       },

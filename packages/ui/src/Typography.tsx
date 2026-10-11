@@ -20,19 +20,19 @@ import { neutralColors, brandColors } from './colors'
  */
 export const Text = styled(Paragraph, {
   name: 'Text',
-  color: neutralColors.text.primary,
+  color: '$color12',
   fontSize: '$3',
 
   variants: {
     variant: {
       default: {
-        color: neutralColors.text.primary,
+        color: '$color12',
       },
       muted: {
-        color: neutralColors.text.secondary,
+        color: '$color11',
       },
       subtle: {
-        color: neutralColors.text.muted,
+        color: '$color1',
       },
       inverse: {
         color: neutralColors.background.page,
@@ -52,13 +52,13 @@ export const Text = styled(Paragraph, {
         color: brandColors.secondary,
       },
       warning: {
-        color: brandColors.primary,
+        color: '$brand',
       },
       info: {
         color: brandColors.secondary,
       },
       brand: {
-        color: brandColors.primary,
+        color: '$brand',
       },
     },
     size: {
@@ -130,7 +130,7 @@ export type TextProps = GetProps<typeof Text>
 
 const ButtonTextFrame = styled(Paragraph, {
   name: 'ButtonText',
-  color: neutralColors.text.primary,
+  color: '$color12',
   fontWeight: '600',
   fontSize: '$3',
   textAlign: 'center',
@@ -149,44 +149,47 @@ const ButtonTextFrame = styled(Paragraph, {
     },
     variant: {
       primary: {
-        color: neutralColors.text.primary,
+        color: '$color12',
       },
       secondary: {
-        color: brandColors.primary,
+        color: '$brand',
       },
       danger: {
-        color: neutralColors.text.primary,
+        color: '$color12',
       },
       success: {
-        color: neutralColors.text.primary,
+        color: '$color12',
       },
       ghost: {
-        color: neutralColors.text.primary,
+        color: '$color12',
       },
       // Variants from ButtonText
       default: {
-        color: neutralColors.text.primary,
+        color: '$color12',
       },
       inverse: {
         color: '#FFFFFF',
       },
       muted: {
-        color: neutralColors.text.secondary,
+        color: '$color11',
       },
       /**
        * cta - primary call-to-action treatment (Instrument): uppercase,
        * tracked, dark ink on the amber fill. Opt-in per button.
        */
       cta: {
-        color: neutralColors.text.onFill,
+        color: '$onBrand',
         fontWeight: '700',
         textTransform: 'uppercase',
         letterSpacing: 1.1,
       },
     },
-    /** Dark ink for a light brand fill; set by the parent Button. */
+    /** Label on a filled Button; set by the parent Button. */
     onFill: {
-      true: {
+      brand: {
+        color: '$onBrand',
+      },
+      status: {
         color: neutralColors.text.onFill,
       },
     },
@@ -200,16 +203,16 @@ const ButtonTextFrame = styled(Paragraph, {
 
 /**
  * ButtonText - label inside a Button. On the web, inside a filled Button
- * (primary, danger, success, warning) it switches to dark ink whatever its
- * variant, because white on those fills fails contrast; pass `color` to opt
- * out. The native app keeps white labels (see fillInk.native.ts).
+ * (primary, danger, success, warning) it uses the label color of that fill
+ * whatever its variant: white, or blue on a card's white brand button. Pass
+ * `color` to opt out. The native app keeps its own labels (see
+ * fillInk.native.ts).
  */
 export const ButtonText = ButtonTextFrame.styleable(
   function ButtonText(props, ref) {
-    const onFill = useContext(ButtonFillContext) && props.color === undefined
-    return (
-      <ButtonTextFrame ref={ref} {...props} onFill={onFill || props.onFill} />
-    )
+    const fill = useContext(ButtonFillContext)
+    const onFill = props.color === undefined && fill ? fill : props.onFill
+    return <ButtonTextFrame ref={ref} {...props} onFill={onFill} />
   },
 )
 
@@ -244,10 +247,10 @@ export const LinkText = styled(Paragraph, {
   name: 'LinkText',
   fontSize: 14,
   fontWeight: '600',
-  color: brandColors.primary,
+  color: '$brand',
   cursor: 'pointer',
   hoverStyle: {
-    color: brandColors.primaryHover,
+    color: '$brandHover',
   },
 })
 
@@ -270,15 +273,15 @@ export const monoFont = {
 export const MonoText = styled(Paragraph, {
   name: 'MonoText',
   fontFamily: monoFont.medium,
-  color: neutralColors.text.primary,
+  color: '$color12',
   fontSize: 15,
 
   variants: {
     variant: {
-      default: { color: neutralColors.text.primary },
-      muted: { color: neutralColors.text.secondary },
-      subtle: { color: neutralColors.text.muted },
-      brand: { color: brandColors.primary },
+      default: { color: '$color12' },
+      muted: { color: '$color11' },
+      subtle: { color: '$color1' },
+      brand: { color: '$brand' },
       success: { color: brandColors.secondary },
     },
     size: {
@@ -316,13 +319,13 @@ export const MicroLabel = styled(Paragraph, {
   lineHeight: 15,
   letterSpacing: 1.6,
   textTransform: 'uppercase',
-  color: neutralColors.text.muted,
+  color: '$color1',
 
   variants: {
     variant: {
-      default: { color: neutralColors.text.muted },
-      secondary: { color: neutralColors.text.secondary },
-      brand: { color: brandColors.primary },
+      default: { color: '$color1' },
+      secondary: { color: '$color11' },
+      brand: { color: '$brand' },
       success: { color: brandColors.secondary },
     },
   } as const,

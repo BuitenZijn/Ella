@@ -1,5 +1,5 @@
 import React from 'react'
-import { XStack, YStack, Text, brandColors, neutralColors } from '@ella/ui'
+import { XStack, YStack, Text, cardColors } from '@ella/ui'
 import { Pressable } from 'react-native'
 
 const ROWS = [
@@ -46,17 +46,15 @@ function Key({
         alignItems='center'
         justifyContent='center'
         backgroundColor={
-          tone === 'action'
-            ? brandColors.primary
-            : neutralColors.background.elevated
+          tone === 'action' ? cardColors.button : cardColors.background
         }
         borderWidth={1}
-        borderColor={neutralColors.border.subtle}
+        borderColor={cardColors.background}
       >
         <Text
           size='$7'
           weight='bold'
-          color={tone === 'action' ? 'white' : undefined}
+          color={tone === 'action' ? cardColors.onButton : cardColors.text}
         >
           {label}
         </Text>

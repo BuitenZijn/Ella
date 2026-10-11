@@ -14,14 +14,13 @@ import {
   Button,
   ButtonText,
   Text,
-  brandColors,
   neutralColors,
 } from '@ella/ui'
 import { Eye, EyeOff } from 'lucide-react'
 import { MIN_PASSWORD_LENGTH } from '@/lib/authForms'
 
 const inlineLinkStyle: React.CSSProperties = {
-  color: brandColors.primary,
+  color: 'var(--brand)',
   fontWeight: 600,
   textDecoration: 'none',
 }

@@ -3,7 +3,6 @@ import { Modal, Pressable, StyleSheet, View } from 'react-native'
 import {
   Button,
   ButtonText,
-  Card,
   IconContainer,
   Text,
   XStack,
@@ -51,9 +50,10 @@ export function ActionConfirmModal({
           accessibilityLabel='Bevestiging sluiten'
         />
 
-        <Card
-          variant='outlined'
+        <YStack
           backgroundColor={neutralColors.background.page}
+          borderWidth={1}
+          borderColor={neutralColors.border.default}
           borderRadius={12}
           padding='$5'
           gap='$4'
@@ -94,7 +94,7 @@ export function ActionConfirmModal({
               <ButtonText variant='danger'>{confirmLabel}</ButtonText>
             </Button>
           </XStack>
-        </Card>
+        </YStack>
       </View>
     </Modal>
   )

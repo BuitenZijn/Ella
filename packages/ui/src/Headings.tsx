@@ -1,5 +1,4 @@
 import { styled, GetProps, H1, H2, H3, Paragraph } from 'tamagui'
-import { neutralColors } from './colors'
 
 /**
  * PageTitle - Main page heading
@@ -9,7 +8,7 @@ export const PageTitle = styled(H1, {
   name: 'PageTitle',
   fontSize: 42,
   fontWeight: '700',
-  color: neutralColors.text.primary,
+  color: '$color12',
 })
 
 /**
@@ -20,7 +19,7 @@ export const SectionTitle = styled(H2, {
   name: 'SectionTitle',
   fontSize: 24,
   fontWeight: '600',
-  color: neutralColors.text.primary,
+  color: '$color12',
 })
 
 /**
@@ -31,7 +30,7 @@ export const CardTitle = styled(H3, {
   name: 'CardTitle',
   fontSize: 18,
   fontWeight: '700',
-  color: neutralColors.text.primary,
+  color: '$color12',
 })
 
 /**
@@ -42,12 +41,12 @@ export const BodyText = styled(Paragraph, {
   name: 'BodyText',
   fontSize: 15,
   lineHeight: 22,
-  color: neutralColors.text.primary,
+  color: '$color12',
 
   variants: {
     muted: {
       true: {
-        color: neutralColors.text.secondary,
+        color: '$color11',
       },
     },
     size: {
@@ -78,7 +77,7 @@ export const BodyText = styled(Paragraph, {
 export const Caption = styled(Paragraph, {
   name: 'Caption',
   fontSize: 12,
-  color: neutralColors.text.muted,
+  color: '$color1',
 
   variants: {
     size: {
@@ -107,7 +106,7 @@ export const ValueText = styled(Paragraph, {
   name: 'ValueText',
   fontSize: 14,
   fontWeight: '600',
-  color: neutralColors.text.primary,
+  color: '$color12',
 })
 
 /**

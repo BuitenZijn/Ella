@@ -10,6 +10,7 @@ import {
   Card,
   brandColors,
   neutralColors,
+  cardColors,
   Spinner,
   LinkText,
 } from '@ella/ui'
@@ -112,7 +113,7 @@ export function ForgotPasswordScreen({ navigation }: Props) {
             <YStack gap='$4'>
               <Card padding='$4' variant='outlined' borderRadius={10}>
                 <YStack gap='$3' alignItems='center'>
-                  <Mail size={24} color={brandColors.primary} />
+                  <Mail size={24} color={cardColors.text} />
                   <Text
                     size='$4'
                     variant='muted'

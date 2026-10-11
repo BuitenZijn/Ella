@@ -1,6 +1,6 @@
 'use client'
 
-import { YStack, XStack, Input, TextArea, Text, neutralColors } from '@ella/ui'
+import { YStack, XStack, Input, TextArea, Text } from '@ella/ui'
 import type { LucideIcon } from 'lucide-react'
 
 export interface EditableFieldProps {
@@ -35,7 +35,7 @@ export function EditableField({
   return (
     <YStack gap='$2'>
       <XStack gap='$2' alignItems='center'>
-        <Icon size={16} color={neutralColors.text.secondary} />
+        <Icon size={16} color='var(--color11)' />
         <Text size='$4' variant='muted' weight='semibold'>
           {label}
         </Text>

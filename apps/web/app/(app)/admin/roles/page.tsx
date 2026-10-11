@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  YStack,
-  Text,
-  Card,
-  neutralColors,
-  brandColors,
-  semanticColors,
-} from '@ella/ui'
+import { YStack, Text, Card, neutralColors } from '@ella/ui'
 import { Fragment } from 'react'
 import { useQuery } from 'convex/react'
 import { api } from '@ella/backend/api'
@@ -70,8 +63,8 @@ function RolesMatrix() {
                   style={{
                     textAlign: 'left',
                     padding: '8px 12px',
-                    borderBottom: `2px solid ${neutralColors.border.default}`,
-                    color: neutralColors.text.secondary,
+                    borderBottom: `2px solid var(--borderColor)`,
+                    color: 'var(--color11)',
                     fontWeight: 600,
                     fontSize: 12,
                     textTransform: 'uppercase',
@@ -86,8 +79,8 @@ function RolesMatrix() {
                     style={{
                       textAlign: 'center',
                       padding: '8px 16px',
-                      borderBottom: `2px solid ${neutralColors.border.default}`,
-                      color: neutralColors.text.primary,
+                      borderBottom: `2px solid var(--borderColor)`,
+                      color: 'var(--color12)',
                       fontWeight: 600,
                       fontSize: 13,
                       minWidth: 90,
@@ -110,8 +103,8 @@ function RolesMatrix() {
                         fontSize: 11,
                         textTransform: 'uppercase',
                         letterSpacing: '0.08em',
-                        color: brandColors.primary,
-                        borderTop: `1px solid ${neutralColors.border.subtle}`,
+                        color: 'var(--brand)',
+                        borderTop: `1px solid var(--borderColor)`,
                       }}
                     >
                       {domain.replace(/_/g, ' ')}
@@ -122,7 +115,7 @@ function RolesMatrix() {
                       <td
                         style={{
                           padding: '6px 12px 6px 24px',
-                          color: neutralColors.text.primary,
+                          color: 'var(--color12)',
                           fontFamily: 'var(--font-mono, monospace)',
                           fontSize: 12,
                         }}
@@ -141,15 +134,9 @@ function RolesMatrix() {
                             }}
                           >
                             {has ? (
-                              <Check
-                                size={16}
-                                color={semanticColors.success.main}
-                              />
+                              <Check size={16} color='var(--color12)' />
                             ) : (
-                              <Minus
-                                size={16}
-                                color={neutralColors.border.subtle}
-                              />
+                              <Minus size={16} color='var(--borderColor)' />
                             )}
                           </td>
                         )
@@ -165,14 +152,10 @@ function RolesMatrix() {
 
       <Card padding='$4'>
         <YStack gap='$2'>
-          <Text
-            fontSize={13}
-            fontWeight='600'
-            color={neutralColors.text.primary}
-          >
+          <Text fontSize={13} fontWeight='600' color='$color12'>
             Hoe het werkt
           </Text>
-          <Text fontSize={13} color={neutralColors.text.secondary}>
+          <Text fontSize={13} color='$color11'>
             Elke gebruiker heeft een rol (lid of admin) die een reeks rechten
             geeft. Admins kunnen op de pagina Gebruikers ook extra rechten per
             persoon toekennen, bovenop wat de rol geeft.

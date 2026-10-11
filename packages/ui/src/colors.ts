@@ -99,12 +99,15 @@ export const brandColors = {
 
 /**
  * Use these for status indicators, alerts, and feedback.
- * Each has: text (for labels), background (for fills), border (for outlines), main (for icons/dots)
+ * Each has: text (for labels), background (for fills), surface (the same
+ * tint as an opaque color, for boxes that may sit on a blue card), border (for
+ * outlines), main (for icons/dots)
  */
 export const semanticColors = {
   success: {
     text: paletteColors.green,
     background: paletteColors.greenLight,
+    surface: '#DAE2C8',
     border: paletteColors.green,
     main: paletteColors.green,
     hover: paletteColors.greenHover,
@@ -112,6 +115,7 @@ export const semanticColors = {
   error: {
     text: paletteColors.rust,
     background: paletteColors.rustLight,
+    surface: '#EBD9CA',
     border: paletteColors.rust,
     main: paletteColors.rust,
     hover: paletteColors.rustHover,
@@ -119,6 +123,7 @@ export const semanticColors = {
   warning: {
     text: paletteColors.orange,
     background: paletteColors.orangeLight,
+    surface: '#EFDEC1',
     border: paletteColors.orange,
     main: paletteColors.orange,
     hover: paletteColors.orangeHover,
@@ -126,6 +131,7 @@ export const semanticColors = {
   info: {
     text: paletteColors.blue,
     background: paletteColors.blueLight,
+    surface: '#D7DFD7',
     border: paletteColors.blue,
     main: paletteColors.blue,
     hover: paletteColors.blueHover,
@@ -171,6 +177,31 @@ export const neutralColors = {
     strong: paletteColors.ellaBlueHover,
     focus: paletteColors.ellaBlue,
   },
+} as const
+
+// =============================================================================
+// Card Colors - For cards and game tiles (blue surface, white text)
+// =============================================================================
+
+/**
+ * Cards are blue with white text; buttons on a card invert to white with a
+ * blue label. The `card` Tamagui theme is built from these, so text inside a
+ * card picks them up through theme tokens.
+ */
+export const cardColors = {
+  background: paletteColors.ellaBlue,
+  hover: paletteColors.ellaBlueHover,
+  text: paletteColors.white,
+  /** Secondary text on a card (5.3:1 on the blue) */
+  textSecondary: '#D9E7F3',
+  /** Muted text on a card (4.9:1 on the blue) */
+  textMuted: '#CCDFEE',
+  border: 'rgba(255, 255, 255, 0.35)',
+  /** Button fill on a card */
+  button: paletteColors.white,
+  buttonHover: '#E6EFF7',
+  /** Button label on a card */
+  onButton: paletteColors.ellaBlue,
 } as const
 
 // =============================================================================
@@ -256,6 +287,7 @@ export const overlayColors = {
 export type BrandColors = typeof brandColors
 export type SemanticColors = typeof semanticColors
 export type NeutralColors = typeof neutralColors
+export type CardColors = typeof cardColors
 export type RoleColors = typeof roleColors
 export type StatusColors = typeof statusColors
 export type OverlayColors = typeof overlayColors

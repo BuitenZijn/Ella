@@ -85,7 +85,7 @@ export function ResetPasswordForm({
     <FormCard>
       <form onSubmit={onSetNewPassword}>
         <YStack gap='$5'>
-          <Text color='$gray11' size='$3' textAlign='center'>
+          <Text color='$color11' size='$3' textAlign='center'>
             Nieuw wachtwoord instellen voor {email}
           </Text>
 

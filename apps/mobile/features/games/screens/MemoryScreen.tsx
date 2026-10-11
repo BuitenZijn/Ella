@@ -13,7 +13,7 @@ import {
   XStack,
   Text,
   LoadingSpinner,
-  brandColors,
+  cardColors,
   neutralColors,
 } from '@ella/ui'
 import { AppShell } from '../../../components/shell'
@@ -148,16 +148,14 @@ function MemoryGame({
                     borderRadius={10}
                     alignItems='center'
                     justifyContent='center'
-                    backgroundColor={
-                      shown
-                        ? neutralColors.background.elevated
-                        : brandColors.primary
-                    }
+                    backgroundColor={cardColors.background}
                     borderWidth={2}
                     borderColor={
                       found.has(i)
-                        ? brandColors.accent
-                        : neutralColors.border.subtle
+                        ? neutralColors.text.primary
+                        : shown
+                          ? cardColors.text
+                          : cardColors.background
                     }
                     opacity={found.has(i) ? 0.6 : 1}
                   >

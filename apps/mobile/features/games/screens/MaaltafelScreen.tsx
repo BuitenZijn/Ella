@@ -33,13 +33,11 @@ interface Round {
   bombed: Set<string>
 }
 
+/** The next question: one blank at a time, so the picture opens square by square. */
 function newBlanks(settings: MaaltafelSettings, solved: Set<string>) {
-  return pickBlanks(
-    settings.gridSize,
-    settings.blanksPerRound,
-    solved,
-    Math.random,
-  ).map(([r, c]) => cellKey(r, c))
+  return pickBlanks(settings.gridSize, 1, solved, Math.random).map(([r, c]) =>
+    cellKey(r, c),
+  )
 }
 
 function MaaltafelGame({
@@ -203,6 +201,11 @@ function MaaltafelGame({
                       accessibilityLabel={
                         isBlank ? `${r + 1} keer ${c + 1}` : undefined
                       }
+                      // Opaque under the (translucent) cell colour: the
+                      // picture shows only through solved cells.
+                      style={{
+                        backgroundColor: isSolved ? 'transparent' : 'white',
+                      }}
                     >
                       <YStack
                         width={cell}

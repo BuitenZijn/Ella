@@ -26,7 +26,6 @@ function MaaltafelForm({ initial }: { initial: MaaltafelSettings }) {
   const { success, error: toastError } = useToast()
   const [form, setForm] = useState({
     gridSize: String(initial.gridSize),
-    blanksPerRound: String(initial.blanksPerRound),
     bombChance: String(Math.round(initial.bombChance * 100)),
   })
   const [busy, setBusy] = useState(false)
@@ -38,7 +37,9 @@ function MaaltafelForm({ initial }: { initial: MaaltafelSettings }) {
     try {
       await save({
         gridSize: Number(form.gridSize),
-        blanksPerRound: Number(form.blanksPerRound),
+        // The game asks one square at a time. (Not the stored value: saving
+        // a 3×3 grid would fail its check against the old default of 10.)
+        blanksPerRound: 1,
         bombChance: Number(form.bombChance) / 100,
       })
       success('Bewaard.')
@@ -61,15 +62,6 @@ function MaaltafelForm({ initial }: { initial: MaaltafelSettings }) {
             max={12}
             value={form.gridSize}
             onChange={set('gridSize')}
-            style={fieldStyle}
-          />
-        </Field>
-        <Field label='Vragen per ronde'>
-          <input
-            type='number'
-            min={1}
-            value={form.blanksPerRound}
-            onChange={set('blanksPerRound')}
             style={fieldStyle}
           />
         </Field>

@@ -30,6 +30,7 @@ async function withImageUrls(
       scientificName: row.scientificName,
       description: row.description,
       funFact: row.funFact,
+      image: row.image ?? null,
       imageUrl: row.image ? await ctx.storage.getUrl(row.image) : null,
     })),
   )

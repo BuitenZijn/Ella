@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useRef, type ReactNode } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '@ella/backend/api'
 import type { Id } from '@ella/backend/dataModel'
@@ -12,6 +12,7 @@ import {
   ButtonText,
   neutralColors,
 } from '@ella/ui'
+import { X } from 'lucide-react'
 
 /** Upload a picture for the shared content (not tied to an account). */
 export function useContentUpload() {
@@ -82,7 +83,15 @@ export function Field({
   )
 }
 
-/** The frame and buttons around an edit form. */
+/**
+ * An edit form in a modal over the list.
+ *
+ * A plain fixed overlay rather than a Tamagui Dialog: the image crop modal
+ * opens on top of it, and a Dialog's animated (transformed) content would
+ * pin that crop overlay inside the card and close on clicks in it. Escape
+ * listens on the document, so the crop modal's window listener gets it
+ * first (see listenForCropKeys).
+ */
 export function EditPanel({
   title,
   busy,
@@ -98,26 +107,102 @@ export function EditPanel({
   onCancel: () => void
   children: ReactNode
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const titleId = useId()
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !busy) onCancel()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [busy, onCancel])
+
+  // Focus moves into the modal and the page behind stops scrolling; both
+  // go back as it closes.
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialogRef.current?.focus()
+    return () => {
+      document.body.style.overflow = overflow
+      previous?.focus?.()
+    }
+  }, [])
+
   return (
-    <YStack
-      gap='$3'
-      padding='$4'
-      borderRadius='$4'
-      borderWidth={1}
-      borderColor={neutralColors.border.subtle}
-      backgroundColor={neutralColors.background.elevated}
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      }}
     >
-      <Text weight='semibold'>{title}</Text>
-      {children}
-      <XStack gap='$2'>
-        <Button disabled={busy || !canSave} onPress={onSave}>
-          <ButtonText>{busy ? 'Bewaren…' : 'Bewaren'}</ButtonText>
-        </Button>
-        <Button variant='outline' onPress={onCancel}>
-          <ButtonText>Annuleren</ButtonText>
-        </Button>
-      </XStack>
-    </YStack>
+      <div
+        ref={dialogRef}
+        role='dialog'
+        aria-modal='true'
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        style={{
+          outline: 'none',
+          width: '100%',
+          maxWidth: 640,
+          maxHeight: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: 16,
+          border: `1px solid ${neutralColors.border.subtle}`,
+          backgroundColor: neutralColors.background.elevated,
+          boxShadow: '0 12px 40px rgba(0, 0, 0, 0.25)',
+        }}
+      >
+        <XStack
+          alignItems='center'
+          justifyContent='space-between'
+          gap='$3'
+          padding='$4'
+          paddingBottom='$2'
+        >
+          <Text id={titleId} size='$5' weight='semibold'>
+            {title}
+          </Text>
+          <Button
+            size='$3'
+            chromeless
+            aria-label='Sluiten'
+            disabled={busy}
+            onPress={onCancel}
+            icon={<X size={18} color={neutralColors.text.secondary} />}
+          />
+        </XStack>
+        <div style={{ overflowY: 'auto', minHeight: 0 }}>
+          <YStack gap='$3' padding='$4' paddingTop='$2'>
+            {children}
+          </YStack>
+        </div>
+        <XStack
+          gap='$2'
+          justifyContent='flex-end'
+          padding='$4'
+          borderTopWidth={1}
+          borderColor={neutralColors.border.subtle}
+        >
+          <Button variant='outline' disabled={busy} onPress={onCancel}>
+            <ButtonText>Annuleren</ButtonText>
+          </Button>
+          <Button disabled={busy || !canSave} onPress={onSave}>
+            <ButtonText>{busy ? 'Bewaren…' : 'Bewaren'}</ButtonText>
+          </Button>
+        </XStack>
+      </div>
+    </div>
   )
 }
 

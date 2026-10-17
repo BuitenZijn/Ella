@@ -136,13 +136,12 @@ export function CraftsTab() {
 
   return (
     <YStack gap='$4'>
-      {editing === null ? (
-        <XStack>
-          <Button icon={<Plus size={16} />} onPress={() => setEditing('new')}>
-            <ButtonText>Video toevoegen</ButtonText>
-          </Button>
-        </XStack>
-      ) : (
+      <XStack>
+        <Button icon={<Plus size={16} />} onPress={() => setEditing('new')}>
+          <ButtonText>Video toevoegen</ButtonText>
+        </Button>
+      </XStack>
+      {editing !== null && (
         <CraftForm
           key={editing === 'new' ? 'new' : editing._id}
           craft={editing === 'new' ? null : editing}

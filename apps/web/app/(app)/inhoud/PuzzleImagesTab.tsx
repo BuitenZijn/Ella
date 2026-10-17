@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@ella/backend/api'
 import type { Id } from '@ella/backend/dataModel'
@@ -14,7 +14,12 @@ import {
   useToast,
 } from '@ella/ui'
 import { Trash2 } from 'lucide-react'
-import { ConfirmDialog, LoadingState } from '@/components/common'
+import {
+  ConfirmDialog,
+  ImageUpload,
+  LoadingState,
+  type ImageUploadRef,
+} from '@/components/common'
 import { getErrorMessage } from '@/lib/errorMessage'
 import { Field, fieldStyle, useContentUpload } from './shared'
 
@@ -27,7 +32,9 @@ export function PuzzleImagesTab() {
   const upload = useContentUpload()
   const { success, error: toastError } = useToast()
   const [name, setName] = useState('')
-  const [file, setFile] = useState<File | null>(null)
+  const imageRef = useRef<ImageUploadRef>(null)
+  const [hasFile, setHasFile] = useState(false)
+  const [imageBusy, setImageBusy] = useState(false)
   const [busy, setBusy] = useState(false)
   const [formKey, setFormKey] = useState(0)
   const [removing, setRemoving] = useState<{
@@ -38,13 +45,14 @@ export function PuzzleImagesTab() {
   if (images === undefined) return <LoadingState />
 
   const add = async () => {
+    const file = imageRef.current?.getPendingFile()
     if (!file) return
     setBusy(true)
     try {
       await addImage({ name, image: await upload(file) })
       success('Afbeelding toegevoegd.')
       setName('')
-      setFile(null)
+      setHasFile(false)
       setFormKey(k => k + 1)
     } catch (err) {
       toastError(getErrorMessage(err, 'Toevoegen is niet gelukt.'))
@@ -68,15 +76,23 @@ export function PuzzleImagesTab() {
             style={fieldStyle}
           />
         </Field>
-        <Field label='Afbeelding'>
-          <input
-            type='file'
-            accept='image/*'
-            onChange={e => setFile(e.target.files?.[0] ?? null)}
+        <YStack gap={6} width={180}>
+          <Text size='$3' weight='semibold'>
+            Afbeelding
+          </Text>
+          <ImageUpload
+            ref={imageRef}
+            onFileChange={setHasFile}
+            onProcessingChange={setImageBusy}
+            preset='questCover'
+            // The puzzle is a square grid.
+            cropAspect='square'
+            aspectRatio={1}
+            placeholder='Kies een afbeelding'
           />
-        </Field>
+        </YStack>
         <Button
-          disabled={busy || !file || !name.trim()}
+          disabled={busy || imageBusy || !hasFile || !name.trim()}
           onPress={() => void add()}
         >
           <ButtonText>{busy ? 'Opladen…' : 'Toevoegen'}</ButtonText>

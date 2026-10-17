@@ -120,13 +120,12 @@ export function MemoryTab() {
 
   return (
     <YStack gap='$3'>
-      {editing === null ? (
-        <XStack>
-          <Button icon={<Plus size={16} />} onPress={() => setEditing('new')}>
-            <ButtonText>Thema toevoegen</ButtonText>
-          </Button>
-        </XStack>
-      ) : (
+      <XStack>
+        <Button icon={<Plus size={16} />} onPress={() => setEditing('new')}>
+          <ButtonText>Thema toevoegen</ButtonText>
+        </Button>
+      </XStack>
+      {editing !== null && (
         <ThemeForm
           key={editing === 'new' ? 'new' : editing._id}
           theme={editing === 'new' ? null : editing}

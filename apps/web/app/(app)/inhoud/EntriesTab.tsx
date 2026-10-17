@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useMutation, useQuery } from 'convex/react'
 import { api } from '@ella/backend/api'
 import type { Id } from '@ella/backend/dataModel'
@@ -15,7 +15,12 @@ import {
   useToast,
 } from '@ella/ui'
 import { ImageOff, Pencil, Plus, Trash2 } from 'lucide-react'
-import { ConfirmDialog, LoadingState } from '@/components/common'
+import {
+  ConfirmDialog,
+  ImageUpload,
+  LoadingState,
+  type ImageUploadRef,
+} from '@/components/common'
 import { getErrorMessage } from '@/lib/errorMessage'
 import {
   EditPanel,
@@ -35,6 +40,7 @@ type Entry = {
   scientificName: string
   description: string
   funFact: string
+  image: Id<'_storage'> | null
   imageUrl: string | null
 }
 
@@ -64,8 +70,8 @@ function EntryForm({
     description: entry?.description ?? '',
     funFact: entry?.funFact ?? '',
   })
-  const [file, setFile] = useState<File | null>(null)
-  const [removeImage, setRemoveImage] = useState(false)
+  const imageRef = useRef<ImageUploadRef>(null)
+  const [imageBusy, setImageBusy] = useState(false)
   const [busy, setBusy] = useState(false)
   const set = (key: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm(f => ({ ...f, [key]: e.target.value }))
@@ -73,7 +79,12 @@ function EntryForm({
   const save = async () => {
     setBusy(true)
     try {
-      const image = file ? await upload(file) : removeImage ? null : undefined
+      const file = imageRef.current?.getPendingFile()
+      const image = file
+        ? await upload(file)
+        : imageRef.current?.isRemoved
+          ? null
+          : undefined
       await saveEntry({
         table,
         id: entry?._id,
@@ -93,7 +104,7 @@ function EntryForm({
     <EditPanel
       title={entry ? `${entry.name} aanpassen` : `Nieuwe ${NOUN[table]}`}
       busy={busy}
-      canSave={!!form.name.trim() && !!form.description.trim()}
+      canSave={!!form.name.trim() && !!form.description.trim() && !imageBusy}
       onSave={() => void save()}
       onCancel={onDone}
     >
@@ -140,23 +151,21 @@ function EntryForm({
           style={textAreaStyle}
         />
       </Field>
-      <Field label='Afbeelding'>
-        <input
-          type='file'
-          accept='image/*'
-          onChange={e => setFile(e.target.files?.[0] ?? null)}
+      <YStack gap={6}>
+        <Text size='$3' weight='semibold'>
+          Afbeelding
+        </Text>
+        <ImageUpload
+          ref={imageRef}
+          value={entry?.image}
+          imageUrl={entry?.imageUrl}
+          onProcessingChange={setImageBusy}
+          preset='questCover'
+          // Planets are cut into a square puzzle; dinosaurs show whole.
+          cropAspect={table === 'planets' ? 'square' : 'free'}
+          height={220}
         />
-      </Field>
-      {entry?.imageUrl && !file && (
-        <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <input
-            type='checkbox'
-            checked={removeImage}
-            onChange={e => setRemoveImage(e.target.checked)}
-          />
-          <Text size='$3'>Huidige afbeelding verwijderen</Text>
-        </label>
-      )}
+      </YStack>
     </EditPanel>
   )
 }
@@ -178,15 +187,14 @@ export function EntriesTab({ table }: { table: Table }) {
 
   return (
     <YStack gap='$3'>
-      {editing === null ? (
-        <XStack>
-          <Button icon={<Plus size={16} />} onPress={() => setEditing('new')}>
-            <ButtonText>
-              {table === 'dinosaurs' ? 'Dinosaurus' : 'Planeet'} toevoegen
-            </ButtonText>
-          </Button>
-        </XStack>
-      ) : (
+      <XStack>
+        <Button icon={<Plus size={16} />} onPress={() => setEditing('new')}>
+          <ButtonText>
+            {table === 'dinosaurs' ? 'Dinosaurus' : 'Planeet'} toevoegen
+          </ButtonText>
+        </Button>
+      </XStack>
+      {editing !== null && (
         <EntryForm
           key={editing === 'new' ? 'new' : editing._id}
           table={table}

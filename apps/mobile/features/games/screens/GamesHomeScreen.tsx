@@ -3,7 +3,12 @@ import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import type { StackNavigationProp } from '@react-navigation/stack'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
-import { GAME_EMOJI, GAME_LABELS, type Game } from '@ella/backend/types'
+import {
+  GAME_CATEGORIES,
+  GAME_EMOJI,
+  GAME_LABELS,
+  type Game,
+} from '@ella/backend/types'
 import {
   YStack,
   XStack,
@@ -28,6 +33,36 @@ const GAME_SCREENS: Record<Game, keyof HomeStackParamList> = {
   dino_quiz: 'DinoQuiz',
   memory: 'Memory',
   planeten_puzzel: 'PlanetPuzzle',
+  splitsen: 'NumberBonds',
+  klokkijken: 'Clock',
+  geld_tellen: 'Money',
+  woordjes_lezen: 'Reading',
+  reeksen: 'Sequences',
+}
+
+/** A group of tiles under a heading: Rekenen, Taal, ... */
+function Section({
+  emoji,
+  label,
+  children,
+}: {
+  emoji: string
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <YStack gap='$2'>
+      <XStack alignItems='center' gap='$2' paddingTop='$2'>
+        <Emoji size={24}>{emoji}</Emoji>
+        <Text size='$6' weight='bold'>
+          {label}
+        </Text>
+      </XStack>
+      <XStack flexWrap='wrap' gap='$3'>
+        {children}
+      </XStack>
+    </YStack>
+  )
 }
 
 /** Who is playing, and what. */
@@ -99,28 +134,38 @@ export function GamesHomeScreen() {
             </Button>
           )}
         </XStack>
-        <XStack flexWrap='wrap' gap='$3'>
-          {(Object.keys(GAME_SCREENS) as Game[]).map(game => (
-            <ChoiceTile
-              key={game}
-              emoji={GAME_EMOJI[game]}
-              label={GAME_LABELS[game]}
-              onPress={() =>
-                navigation.navigate(GAME_SCREENS[game] as 'Maaltafel')
-              }
-            />
-          ))}
+        {GAME_CATEGORIES.map(category => (
+          <Section
+            key={category.id}
+            emoji={category.emoji}
+            label={category.label}
+          >
+            {category.games.map(game => (
+              <ChoiceTile
+                key={game}
+                emoji={GAME_EMOJI[game]}
+                label={GAME_LABELS[game]}
+                onPress={() =>
+                  navigation.navigate(GAME_SCREENS[game] as 'Maaltafel')
+                }
+              />
+            ))}
+          </Section>
+        ))}
+        <Section emoji='🎨' label='Creatief'>
           <ChoiceTile
-            emoji='🎨'
+            emoji='✂️'
             label='Knutselen'
             onPress={() => navigation.navigate('Crafts')}
           />
-          <ChoiceTile
-            emoji='🏆'
-            label='Mijn scores'
-            onPress={() => navigation.navigate('Results')}
-          />
-        </XStack>
+        </Section>
+        <Button
+          size='$5'
+          variant='outline'
+          onPress={() => navigation.navigate('Results')}
+        >
+          <ButtonText>🏆 Mijn scores</ButtonText>
+        </Button>
         <InfoCard variant='info' size='$3'>
           <Text size='$3'>
             Ouders: profielen en resultaten beheer je ook op de website.

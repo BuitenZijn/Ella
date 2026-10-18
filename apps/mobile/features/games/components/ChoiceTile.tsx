@@ -13,6 +13,9 @@ import { Emoji } from './Emoji'
 interface ChoiceTileProps {
   label: string
   emoji?: string
+  emojiSize?: number
+  /** Show only the emoji; the label is still read out by screen readers */
+  hideLabel?: boolean
   sublabel?: string
   selected?: boolean
   onPress: () => void
@@ -28,6 +31,8 @@ interface ChoiceTileProps {
 export function ChoiceTile({
   label,
   emoji,
+  emojiSize = 32,
+  hideLabel,
   sublabel,
   selected,
   onPress,
@@ -75,10 +80,12 @@ export function ChoiceTile({
           justifyContent='center'
           gap='$1'
         >
-          {emoji && <Emoji size={32}>{emoji}</Emoji>}
-          <Text size='$5' weight='bold' textAlign='center'>
-            {label}
-          </Text>
+          {emoji && <Emoji size={emojiSize}>{emoji}</Emoji>}
+          {!hideLabel && (
+            <Text size='$5' weight='bold' textAlign='center'>
+              {label}
+            </Text>
+          )}
           {sublabel && (
             <Text size='$3' variant='muted' textAlign='center'>
               {sublabel}

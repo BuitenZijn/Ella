@@ -1,6 +1,6 @@
 /**
  * Content shared by every family: dinosaurs, planets, craft videos, memory
- * themes, the multiplication grid's pictures and the games' settings.
+ * themes, word lists, the multiplication grid's pictures and the games' settings.
  * Anyone signed in reads it; `content:manage` changes it (contentAdmin.ts).
  */
 
@@ -12,6 +12,7 @@ import { requireAuth } from '../lib/auth'
 import {
   DEFAULT_MAALTAFEL,
   DEFAULT_MATH_LEVELS,
+  DEFAULT_WORD_LISTS,
   type MathLevel,
 } from '../lib/games'
 import { craftCategoryValidator } from '../schema'
@@ -79,6 +80,33 @@ export const listMemoryThemes = query({
       .query('memoryThemes')
       .withIndex('by_active', q => q.eq('active', true))
       .collect()
+  },
+})
+
+/**
+ * Word lists to read. Until any list is made on the website, the app's own
+ * lists are used, so the game works on a fresh deployment.
+ */
+export const listWordLists = query({
+  args: {},
+  handler: async ctx => {
+    await requireAuth(ctx)
+    if (!(await ctx.db.query('wordLists').first())) {
+      return DEFAULT_WORD_LISTS.map((list, i) => ({
+        _id: `default-${i}`,
+        ...list,
+      }))
+    }
+    const rows = await ctx.db
+      .query('wordLists')
+      .withIndex('by_active', q => q.eq('active', true))
+      .collect()
+    return rows.map(({ _id, name, emoji, words }) => ({
+      _id: _id as string,
+      name,
+      emoji,
+      words,
+    }))
   },
 })
 

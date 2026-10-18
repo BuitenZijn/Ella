@@ -27,6 +27,11 @@ export type HomeStackParamList = {
   DinoQuiz: undefined
   Memory: undefined
   PlanetPuzzle: undefined
+  NumberBonds: undefined
+  Clock: undefined
+  Money: undefined
+  Reading: undefined
+  Sequences: undefined
   Results: undefined
 }
 

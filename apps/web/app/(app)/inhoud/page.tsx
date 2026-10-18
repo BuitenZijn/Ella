@@ -9,12 +9,14 @@ import { EntriesTab } from './EntriesTab'
 import { MemoryTab } from './MemoryTab'
 import { PuzzleImagesTab } from './PuzzleImagesTab'
 import { SettingsTab } from './SettingsTab'
+import { WordsTab } from './WordsTab'
 
 const TABS = {
   dinosaurs: 'Dinosaurussen',
   planets: 'Planeten',
   crafts: 'Knutselen',
   memory: 'Memory',
+  words: 'Woordjes',
   images: 'Puzzelafbeeldingen',
   settings: 'Instellingen',
 } as const
@@ -28,7 +30,7 @@ function ContentManager() {
       <YStack width='100%' maxWidth={1000} gap='$5'>
         <PageHeader
           title='Inhoud'
-          description='Wat alle gezinnen in de app zien: dinosaurussen, planeten, knutselvideo’s, memorythema’s, puzzelafbeeldingen en instellingen.'
+          description='Wat alle gezinnen in de app zien: dinosaurussen, planeten, knutselvideo’s, memorythema’s, woordjes, puzzelafbeeldingen en instellingen.'
         />
         <XStack gap='$2' flexWrap='wrap' role='tablist'>
           {(Object.keys(TABS) as Tab[]).map(key => (
@@ -50,6 +52,7 @@ function ContentManager() {
         {tab === 'planets' && <EntriesTab key='planets' table='planets' />}
         {tab === 'crafts' && <CraftsTab />}
         {tab === 'memory' && <MemoryTab />}
+        {tab === 'words' && <WordsTab />}
         {tab === 'images' && <PuzzleImagesTab />}
         {tab === 'settings' && <SettingsTab />}
       </YStack>

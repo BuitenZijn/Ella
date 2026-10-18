@@ -6,9 +6,9 @@ import { api } from '@ella/backend/api'
 import type { Id } from '@ella/backend/dataModel'
 import {
   CHILD_AVATARS,
+  GAME_CATEGORIES,
   GAME_EMOJI,
   GAME_LABELS,
-  GAMES,
   type Game,
 } from '@ella/backend/types'
 import {
@@ -120,39 +120,50 @@ function ChildResults({ child }: { child: Child }) {
     return <Text variant='muted'>{child.name} heeft nog niets gespeeld.</Text>
   }
   return (
-    <YStack gap='$3'>
-      {played.map(({ game, recent }) => (
-        <YStack key={game} gap='$1'>
-          <Text weight='semibold'>
-            {GAME_EMOJI[game]} {GAME_LABELS[game]}
-          </Text>
-          {recent.slice(0, 5).map(s => (
-            <XStack key={s._id} gap='$3' flexWrap='wrap'>
-              <Text size='$3' variant='muted' minWidth={90}>
-                {formatDate(s.completedAt)}
-              </Text>
-              <Text size='$3'>
-                {[
-                  formatTime(s.timeSeconds),
-                  s.correct !== undefined &&
-                    s.total !== undefined &&
-                    `${s.correct}/${s.total} juist`,
-                  s.moves !== undefined && `${s.moves} zetten`,
-                  s.mistakes !== undefined && `${s.mistakes} foutjes`,
-                  s.points !== undefined && `${s.points} punten`,
-                  s.difficulty,
-                  s.subject,
-                ]
-                  .filter(Boolean)
-                  .join(' · ')}
-              </Text>
-              {s.stars !== undefined && (
-                <Text size='$3'>{'⭐'.repeat(s.stars)}</Text>
-              )}
-            </XStack>
-          ))}
-        </YStack>
-      ))}
+    <YStack gap='$4'>
+      {GAME_CATEGORIES.map(category => {
+        const games = played.filter(g => category.games.includes(g.game))
+        if (games.length === 0) return null
+        return (
+          <YStack key={category.id} gap='$3'>
+            <Text size='$5' weight='bold'>
+              {category.emoji} {category.label}
+            </Text>
+            {games.map(({ game, recent }) => (
+              <YStack key={game} gap='$1'>
+                <Text weight='semibold'>
+                  {GAME_EMOJI[game]} {GAME_LABELS[game]}
+                </Text>
+                {recent.slice(0, 5).map(s => (
+                  <XStack key={s._id} gap='$3' flexWrap='wrap'>
+                    <Text size='$3' variant='muted' minWidth={90}>
+                      {formatDate(s.completedAt)}
+                    </Text>
+                    <Text size='$3'>
+                      {[
+                        formatTime(s.timeSeconds),
+                        s.correct !== undefined &&
+                          s.total !== undefined &&
+                          `${s.correct}/${s.total} juist`,
+                        s.moves !== undefined && `${s.moves} zetten`,
+                        s.mistakes !== undefined && `${s.mistakes} foutjes`,
+                        s.points !== undefined && `${s.points} punten`,
+                        s.difficulty,
+                        s.subject,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </Text>
+                    {s.stars !== undefined && (
+                      <Text size='$3'>{'⭐'.repeat(s.stars)}</Text>
+                    )}
+                  </XStack>
+                ))}
+              </YStack>
+            ))}
+          </YStack>
+        )
+      })}
     </YStack>
   )
 }
@@ -163,7 +174,7 @@ function FamilyBest() {
   return (
     <YStack gap='$3'>
       <XStack gap='$2' flexWrap='wrap'>
-        {GAMES.map(g => (
+        {GAME_CATEGORIES.flatMap(c => c.games).map(g => (
           <Button
             key={g}
             size='$3'

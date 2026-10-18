@@ -2,7 +2,7 @@ import React from 'react'
 import { ScrollView } from 'react-native'
 import { useQuery } from 'convex/react'
 import { api } from '@ella/backend/api'
-import { GAME_EMOJI, GAME_LABELS } from '@ella/backend/types'
+import { GAME_CATEGORIES, GAME_EMOJI, GAME_LABELS } from '@ella/backend/types'
 import {
   YStack,
   XStack,
@@ -66,38 +66,55 @@ export function ResultsScreen() {
               {child.name}
             </Text>
           </XStack>
-          {results.games.map(({ game, played, recent }) => (
-            <Theme key={game} name='card'>
-              <YStack
-                gap='$2'
-                padding='$3'
-                borderRadius={12}
-                backgroundColor={cardColors.background}
-              >
-                <Text size='$5' weight='bold'>
-                  {GAME_EMOJI[game]} {GAME_LABELS[game]}
-                </Text>
-                {played === 0 ? (
-                  <Text variant='muted'>Nog niet gespeeld.</Text>
-                ) : (
-                  recent.slice(0, SHOWN).map(s => (
-                    <XStack key={s._id} justifyContent='space-between' gap='$2'>
-                      <YStack flex={1}>
-                        <Text size='$3'>{scoreLine(s)}</Text>
-                        <Text size='$2' variant='muted'>
-                          {new Date(s.completedAt).toLocaleDateString('nl-BE')}
-                          {s.difficulty ? ` · ${s.difficulty}` : ''}
-                          {s.subject ? ` · ${s.subject}` : ''}
-                        </Text>
-                      </YStack>
-                      {s.stars !== undefined && (
-                        <Text size='$3'>{'⭐'.repeat(s.stars) || '–'}</Text>
+          {GAME_CATEGORIES.map(category => (
+            <YStack key={category.id} gap='$3'>
+              <Text size='$6' weight='bold'>
+                {category.emoji} {category.label}
+              </Text>
+              {results.games
+                .filter(g => category.games.includes(g.game))
+                .map(({ game, played, recent }) => (
+                  <Theme key={game} name='card'>
+                    <YStack
+                      gap='$2'
+                      padding='$3'
+                      borderRadius={12}
+                      backgroundColor={cardColors.background}
+                    >
+                      <Text size='$5' weight='bold'>
+                        {GAME_EMOJI[game]} {GAME_LABELS[game]}
+                      </Text>
+                      {played === 0 ? (
+                        <Text variant='muted'>Nog niet gespeeld.</Text>
+                      ) : (
+                        recent.slice(0, SHOWN).map(s => (
+                          <XStack
+                            key={s._id}
+                            justifyContent='space-between'
+                            gap='$2'
+                          >
+                            <YStack flex={1}>
+                              <Text size='$3'>{scoreLine(s)}</Text>
+                              <Text size='$2' variant='muted'>
+                                {new Date(s.completedAt).toLocaleDateString(
+                                  'nl-BE',
+                                )}
+                                {s.difficulty ? ` · ${s.difficulty}` : ''}
+                                {s.subject ? ` · ${s.subject}` : ''}
+                              </Text>
+                            </YStack>
+                            {s.stars !== undefined && (
+                              <Text size='$3'>
+                                {'⭐'.repeat(s.stars) || '–'}
+                              </Text>
+                            )}
+                          </XStack>
+                        ))
                       )}
-                    </XStack>
-                  ))
-                )}
-              </YStack>
-            </Theme>
+                    </YStack>
+                  </Theme>
+                ))}
+            </YStack>
           ))}
         </ScrollView>
       )}

@@ -132,6 +132,74 @@ describe('content management', () => {
     })
   })
 
+  it('uses the default word lists until lists are made', async () => {
+    const f = await userFixture()
+    const defaults = await f.playerClient.query(
+      api.functions.content.listWordLists,
+      {},
+    )
+    expect(defaults.map(l => l.name)).toEqual([
+      'Dieren',
+      'Eten',
+      'Thuis',
+      'Buiten',
+    ])
+
+    const words = [
+      { word: 'kat', emoji: '🐱' },
+      { word: 'Kat ', emoji: '🐈' }, // the same word twice counts once
+      { word: 'hond', emoji: '🐶' },
+      { word: 'vis', emoji: '🐟' },
+    ]
+    await expectPermanentError(
+      f.adminClient.mutation(api.functions.contentAdmin.saveWordList, {
+        name: 'Te kort',
+        emoji: '🐾',
+        words,
+        active: true,
+      }),
+      'INVALID_ARGUMENT',
+    )
+    await f.adminClient.mutation(api.functions.contentAdmin.saveWordList, {
+      name: 'Huisdieren',
+      emoji: '🐾',
+      words: [...words, { word: 'muis', emoji: '🐭' }],
+      active: true,
+    })
+    await f.adminClient.mutation(api.functions.contentAdmin.saveWordList, {
+      name: 'Verborgen',
+      emoji: '🙈',
+      words: [...words, { word: 'muis', emoji: '🐭' }],
+      active: false,
+    })
+    const lists = await f.playerClient.query(
+      api.functions.content.listWordLists,
+      {},
+    )
+    expect(lists.map(l => l.name)).toEqual(['Huisdieren'])
+    expect(lists[0].words.map(w => w.word)).toEqual([
+      'kat',
+      'hond',
+      'vis',
+      'muis',
+    ])
+    await expectPermanentError(
+      f.adminClient.mutation(
+        api.functions.contentAdmin.importDefaultWordLists,
+        {},
+      ),
+      'INVALID_ARGUMENT',
+    )
+    await expect(
+      f.playerClient.mutation(api.functions.contentAdmin.saveWordList, {
+        name: 'Nee',
+        emoji: '🐾',
+        words,
+        active: true,
+      }),
+    ).rejects.toThrow()
+  })
+
   it('edits a card and refuses a taken number', async () => {
     const f = await userFixture()
     await f.t.mutation(internal.functions.content.seedEntry, dino)

@@ -6,14 +6,19 @@ import type { HomeStackParamList } from '../types'
 import {
   ActiveChildProvider,
   AddChildScreen,
+  ClockScreen,
   CraftsScreen,
   DinoQuizScreen,
   GamesHomeScreen,
   MaaltafelScreen,
   MathScreen,
   MemoryScreen,
+  MoneyScreen,
+  NumberBondsScreen,
   PlanetPuzzleScreen,
+  ReadingScreen,
   ResultsScreen,
+  SequencesScreen,
 } from '../../features/games'
 
 /**
@@ -29,6 +34,11 @@ export const fullScreenRoutes = [
   'DinoQuiz',
   'Memory',
   'PlanetPuzzle',
+  'NumberBonds',
+  'Clock',
+  'Money',
+  'Reading',
+  'Sequences',
 ] as const
 
 const Stack = createStackNavigator<HomeStackParamList>()
@@ -48,6 +58,11 @@ export function HomeStack() {
         <Stack.Screen name='DinoQuiz' component={DinoQuizScreen} />
         <Stack.Screen name='Memory' component={MemoryScreen} />
         <Stack.Screen name='PlanetPuzzle' component={PlanetPuzzleScreen} />
+        <Stack.Screen name='NumberBonds' component={NumberBondsScreen} />
+        <Stack.Screen name='Clock' component={ClockScreen} />
+        <Stack.Screen name='Money' component={MoneyScreen} />
+        <Stack.Screen name='Reading' component={ReadingScreen} />
+        <Stack.Screen name='Sequences' component={SequencesScreen} />
         <Stack.Screen name='Results' component={ResultsScreen} />
       </Stack.Navigator>
     </ActiveChildProvider>

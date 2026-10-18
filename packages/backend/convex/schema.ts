@@ -26,6 +26,11 @@ export const gameValidator = v.union(
   v.literal('dino_quiz'),
   v.literal('memory'),
   v.literal('planeten_puzzel'),
+  v.literal('splitsen'),
+  v.literal('klokkijken'),
+  v.literal('geld_tellen'),
+  v.literal('woordjes_lezen'),
+  v.literal('reeksen'),
 )
 
 export const craftCategoryValidator = v.union(
@@ -170,6 +175,16 @@ export default defineSchema({
     name: v.string(),
     emoji: v.string(),
     emojis: v.array(v.string()),
+    active: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_active', ['active']),
+
+  /** Words to read, each with a picture (Woordjes lezen). */
+  wordLists: defineTable({
+    name: v.string(),
+    emoji: v.string(),
+    words: v.array(v.object({ word: v.string(), emoji: v.string() })),
     active: v.boolean(),
     createdAt: v.number(),
     updatedAt: v.number(),

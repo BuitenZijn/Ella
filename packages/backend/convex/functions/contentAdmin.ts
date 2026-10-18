@@ -1,6 +1,6 @@
 /**
  * Managing the shared content (`content:manage`): dinosaurs, planets, craft
- * videos, memory themes, the multiplication grid's pictures and the games'
+ * videos, memory themes, word lists, the multiplication grid's pictures and the games'
  * settings.
  *
  * Content pictures belong to the app, not to the person who uploaded them:
@@ -16,6 +16,7 @@ import { requirePermission } from '../lib/auth'
 import { permanentError } from '../lib/errors'
 import { CLAIM_WINDOW_MS } from '../lib/storageClaims'
 import { youtubeVideoId } from '../lib/youtube'
+import { DEFAULT_WORD_LISTS, WORD_LIST_MAX, WORD_LIST_MIN } from '../lib/games'
 import { craftCategoryValidator, mathLevelValidator } from '../schema'
 
 const tableValidator = v.union(v.literal('dinosaurs'), v.literal('planets'))
@@ -281,6 +282,104 @@ export const removeMemoryTheme = mutation({
   handler: async (ctx, { id }) => {
     await requirePermission(ctx, 'content:manage')
     if (await ctx.db.get(id)) await ctx.db.delete(id)
+    return null
+  },
+})
+
+// ============================================================================
+// Word lists (Woordjes lezen)
+// ============================================================================
+
+const WORD_MAX = 30
+
+/** All lists, also the hidden ones. */
+export const listWordLists = query({
+  args: {},
+  handler: async ctx => {
+    await requirePermission(ctx, 'content:manage')
+    return await ctx.db.query('wordLists').collect()
+  },
+})
+
+export const saveWordList = mutation({
+  args: {
+    id: v.optional(v.id('wordLists')),
+    name: v.string(),
+    emoji: v.string(),
+    words: v.array(v.object({ word: v.string(), emoji: v.string() })),
+    active: v.boolean(),
+  },
+  returns: v.null(),
+  handler: async (ctx, { id, ...list }) => {
+    await requirePermission(ctx, 'content:manage')
+    // A word that is in the list twice keeps its first picture.
+    const seen = new Set<string>()
+    const words = list.words
+      .map(w => ({ word: w.word.trim(), emoji: w.emoji.trim() }))
+      .filter(w => {
+        const key = w.word.toLowerCase()
+        if (!w.word || !w.emoji || seen.has(key)) return false
+        seen.add(key)
+        return true
+      })
+    if (words.length < WORD_LIST_MIN || words.length > WORD_LIST_MAX) {
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        `Een lijst heeft ${WORD_LIST_MIN} tot ${WORD_LIST_MAX} verschillende woorden nodig.`,
+      )
+    }
+    if (words.some(w => w.word.length > WORD_MAX || w.emoji.length > 16)) {
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        `Een woord heeft hoogstens ${WORD_MAX} letters en één emoji.`,
+      )
+    }
+    const row = {
+      name: text(list.name, 'Naam', NAME_MAX),
+      emoji: text(list.emoji, 'Icoon', 16),
+      words,
+      active: list.active,
+      updatedAt: Date.now(),
+    }
+    if (id) {
+      if (!(await ctx.db.get(id)))
+        throw permanentError('NOT_FOUND', 'Deze lijst bestaat niet (meer).')
+      await ctx.db.patch(id, row)
+    } else {
+      await ctx.db.insert('wordLists', { ...row, createdAt: row.updatedAt })
+    }
+    return null
+  },
+})
+
+export const removeWordList = mutation({
+  args: { id: v.id('wordLists') },
+  returns: v.null(),
+  handler: async (ctx, { id }) => {
+    await requirePermission(ctx, 'content:manage')
+    if (await ctx.db.get(id)) await ctx.db.delete(id)
+    return null
+  },
+})
+
+/** Copy the app's own lists in, to edit them; only while there are none. */
+export const importDefaultWordLists = mutation({
+  args: {},
+  returns: v.null(),
+  handler: async ctx => {
+    await requirePermission(ctx, 'content:manage')
+    if (await ctx.db.query('wordLists').first()) {
+      throw permanentError('INVALID_ARGUMENT', 'Er zijn al woordenlijsten.')
+    }
+    const now = Date.now()
+    for (const list of DEFAULT_WORD_LISTS) {
+      await ctx.db.insert('wordLists', {
+        ...list,
+        active: true,
+        createdAt: now,
+        updatedAt: now,
+      })
+    }
     return null
   },
 })

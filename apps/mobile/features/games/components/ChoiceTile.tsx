@@ -8,6 +8,7 @@ import {
   neutralColors,
   semanticColors,
 } from '@ella/ui'
+import { Emoji } from './Emoji'
 
 interface ChoiceTileProps {
   label: string
@@ -74,7 +75,7 @@ export function ChoiceTile({
           justifyContent='center'
           gap='$1'
         >
-          {emoji && <Text fontSize={32}>{emoji}</Text>}
+          {emoji && <Emoji size={32}>{emoji}</Emoji>}
           <Text size='$5' weight='bold' textAlign='center'>
             {label}
           </Text>

@@ -7,6 +7,7 @@ import {
   ButtonText,
   neutralColors,
 } from '@ella/ui'
+import { Emoji } from './Emoji'
 
 export function Stars({ count, size = 36 }: { count: number; size?: number }) {
   return (
@@ -16,9 +17,9 @@ export function Stars({ count, size = 36 }: { count: number; size?: number }) {
       accessibilityLabel={`${count} van 3 sterren`}
     >
       {[1, 2, 3].map(i => (
-        <Text key={i} fontSize={size} opacity={i <= count ? 1 : 0.25}>
+        <Emoji key={i} size={size} opacity={i <= count ? 1 : 0.25}>
           ⭐
-        </Text>
+        </Emoji>
       ))}
     </XStack>
   )
@@ -57,7 +58,7 @@ export function GameDone({
 }: GameDoneProps) {
   return (
     <YStack gap='$4' alignItems='center' paddingVertical='$5'>
-      <Text fontSize={64}>{emoji}</Text>
+      <Emoji size={64}>{emoji}</Emoji>
       <Text size='$8' weight='bold' textAlign='center'>
         {title}
       </Text>

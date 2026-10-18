@@ -13,6 +13,7 @@ import {
 } from '@ella/ui'
 import { AppShell } from '../../../components/shell'
 import { useActiveChild } from '../ActiveChild'
+import { Emoji } from '../components/Emoji'
 import { formatTime } from '../components/GameDone'
 
 const SHOWN = 5
@@ -60,7 +61,7 @@ export function ResultsScreen() {
       ) : (
         <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
           <XStack alignItems='center' gap='$3'>
-            <Text fontSize={40}>{child.avatar}</Text>
+            <Emoji size={40}>{child.avatar}</Emoji>
             <Text size='$7' weight='bold'>
               {child.name}
             </Text>

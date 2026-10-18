@@ -18,6 +18,7 @@ import {
 } from '@ella/ui'
 import { AppShell } from '../../../components/shell'
 import { ChoiceTile } from '../components/ChoiceTile'
+import { Emoji } from '../components/Emoji'
 import { GameDone, formatTime } from '../components/GameDone'
 import { playSound } from '../sounds'
 import { useSaveScore } from '../useSaveScore'
@@ -159,7 +160,9 @@ function MemoryGame({
                     }
                     opacity={found.has(i) ? 0.6 : 1}
                   >
-                    <Text fontSize={size * 0.5}>{shown ? deck[i] : '❔'}</Text>
+                    <Emoji size={Math.floor(size * 0.5)}>
+                      {shown ? deck[i] : '❔'}
+                    </Emoji>
                   </YStack>
                 </Pressable>
               )

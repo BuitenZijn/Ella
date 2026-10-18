@@ -14,6 +14,7 @@ import {
 import { AppShell } from '../../../components/shell'
 import { logger } from '../../../lib/logger'
 import { ChoiceTile } from '../components/ChoiceTile'
+import { Emoji } from '../components/Emoji'
 
 const CATEGORIES = [
   { id: 'tekenen', label: 'Tekenen', emoji: '✏️' },
@@ -106,7 +107,7 @@ export function CraftsScreen() {
                     alignItems='center'
                     justifyContent='center'
                   >
-                    <Text fontSize={26}>▶️</Text>
+                    <Emoji size={26}>▶️</Emoji>
                   </YStack>
                   <YStack flex={1} gap='$1'>
                     <Text weight='bold'>{item.title}</Text>

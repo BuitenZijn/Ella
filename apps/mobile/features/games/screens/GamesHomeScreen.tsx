@@ -18,6 +18,7 @@ import { AppShell } from '../../../components/shell'
 import type { HomeStackParamList } from '../../../navigation/types'
 import { useActiveChild } from '../ActiveChild'
 import { ChoiceTile } from '../components/ChoiceTile'
+import { Emoji } from '../components/Emoji'
 
 type Nav = StackNavigationProp<HomeStackParamList>
 
@@ -41,7 +42,7 @@ export function GamesHomeScreen() {
   } else if (children.length === 0) {
     content = (
       <YStack gap='$4' paddingVertical='$5' alignItems='center'>
-        <Text fontSize={64}>👋</Text>
+        <Emoji size={64}>👋</Emoji>
         <Text size='$7' weight='bold' textAlign='center'>
           Welkom bij Ella!
         </Text>
@@ -87,7 +88,7 @@ export function GamesHomeScreen() {
       <YStack gap='$4'>
         <XStack alignItems='center' justifyContent='space-between' gap='$3'>
           <XStack alignItems='center' gap='$3' flex={1}>
-            <Text fontSize={44}>{child.avatar}</Text>
+            <Emoji size={44}>{child.avatar}</Emoji>
             <Text size='$7' weight='bold' flexShrink={1}>
               Hoi {child.name}!
             </Text>

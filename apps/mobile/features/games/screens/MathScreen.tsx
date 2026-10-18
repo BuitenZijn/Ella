@@ -176,7 +176,15 @@ function MathGame({
         </YStack>
       )}
       <YStack alignItems='center' gap='$2' paddingVertical='$4'>
-        <Text fontSize={40} weight='bold'>
+        <Text
+          fontSize={40}
+          lineHeight={50}
+          weight='bold'
+          textAlign='center'
+          alignSelf='stretch'
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
           {shown} = {input || '?'}
         </Text>
         {feedback && (

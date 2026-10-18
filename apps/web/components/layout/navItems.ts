@@ -1,5 +1,6 @@
 import {
   Baby,
+  Gamepad2,
   Home,
   Library,
   Settings,
@@ -29,6 +30,7 @@ export const PUBLIC_LINKS: NavItem[] = [
  */
 export const MAIN_LINKS: (NavItem & { permission?: string })[] = [
   { label: 'Mijn kinderen', href: '/kinderen', icon: Baby },
+  { label: 'Codenames', href: '/codenames', icon: Gamepad2 },
   {
     label: 'Inhoud',
     href: '/inhoud',

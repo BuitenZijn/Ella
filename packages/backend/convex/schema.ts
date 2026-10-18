@@ -33,6 +33,15 @@ export const gameValidator = v.union(
   v.literal('reeksen'),
 )
 
+export const teamValidator = v.union(v.literal('red'), v.literal('blue'))
+
+export const cardColorValidator = v.union(
+  v.literal('red'),
+  v.literal('blue'),
+  v.literal('neutral'),
+  v.literal('assassin'),
+)
+
 export const craftCategoryValidator = v.union(
   v.literal('tekenen'),
   v.literal('vouwen'),
@@ -190,6 +199,12 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index('by_active', ['active']),
 
+  /** Codenames' word list: one row; the code has the default list. */
+  codenamesWords: defineTable({
+    words: v.array(v.string()),
+    updatedAt: v.number(),
+  }),
+
   /** Pictures that show through the multiplication grid. */
   puzzleImages: defineTable({
     name: v.string(),
@@ -248,4 +263,73 @@ export default defineSchema({
   })
     .index('by_child_and_game', ['childId', 'game', 'completedAt'])
     .index('by_parent', ['parentId']),
+
+  // --------------------------------------------------------------------------
+  // Codenames: a host's session on a big screen, players on their phones
+  // --------------------------------------------------------------------------
+
+  /**
+   * One session: a lobby, then games one after the other with the same
+   * players. `key` is secret: only spymasters see it (functions/codenames.ts).
+   */
+  codenamesSessions: defineTable({
+    hostId: v.id('users'),
+    /** Six digits, what players type or scan; unique among sessions */
+    code: v.string(),
+    status: v.union(
+      v.literal('lobby'),
+      v.literal('playing'),
+      v.literal('finished'),
+    ),
+    redSpymaster: v.optional(v.id('codenamesPlayers')),
+    blueSpymaster: v.optional(v.id('codenamesPlayers')),
+    /** The current (or last) game; absent before the first one */
+    game: v.optional(
+      v.object({
+        words: v.array(v.string()),
+        key: v.array(cardColorValidator),
+        revealed: v.array(v.boolean()),
+        startingTeam: teamValidator,
+        turn: teamValidator,
+        clue: v.optional(
+          v.object({
+            word: v.string(),
+            number: v.number(),
+            guessesLeft: v.number(),
+          }),
+        ),
+        /** The card a guesser tapped, waiting to be confirmed */
+        selected: v.optional(v.number()),
+        clues: v.array(
+          v.object({
+            team: teamValidator,
+            word: v.string(),
+            number: v.number(),
+          }),
+        ),
+        winner: v.optional(teamValidator),
+        /** How it was won: all cards found, or the other team hit the assassin */
+        winReason: v.optional(
+          v.union(v.literal('cards'), v.literal('assassin')),
+        ),
+      }),
+    ),
+    lastActivityAt: v.number(),
+    createdAt: v.number(),
+  })
+    .index('by_code', ['code'])
+    .index('by_host', ['hostId'])
+    .index('by_last_activity', ['lastActivityAt']),
+
+  /** A player in a session: just a name, no account. */
+  codenamesPlayers: defineTable({
+    sessionId: v.id('codenamesSessions'),
+    name: v.string(),
+    team: teamValidator,
+    /** Secret the player's browser keeps to act as this player */
+    token: v.string(),
+    joinedAt: v.number(),
+  })
+    .index('by_session', ['sessionId', 'joinedAt'])
+    .index('by_token', ['token']),
 })

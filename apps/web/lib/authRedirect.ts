@@ -13,6 +13,8 @@ const PUBLIC_PATHS = [
   '/sign-out',
   '/reset-password',
   '/verify-email',
+  // Codenames players join with a code, without an account.
+  '/speel',
 ]
 
 /** Public sections, including everything under them. */

@@ -96,3 +96,20 @@ export type {
   SequenceQuestion,
 } from './convex/lib/games'
 export { youtubeVideoId, youtubeEmbedUrl } from './convex/lib/youtube'
+
+// Codenames (pure rules — shared between backend & apps)
+export {
+  BOARD_SIZE,
+  MIN_PLAYERS_PER_TEAM,
+  MAX_PLAYERS,
+  PLAYER_NAME_MAX,
+  CLUE_WORD_MAX,
+  CLUE_NUMBER_MAX,
+  CODENAMES_WORDS_MIN,
+  CODENAMES_WORDS_MAX,
+  TEAM_LABELS,
+  otherTeam,
+  normalizeWord,
+  clueProblem,
+} from './convex/lib/codenames'
+export type { Team, CardColor } from './convex/lib/codenames'

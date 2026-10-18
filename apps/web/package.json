@@ -13,15 +13,16 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@convex-dev/auth": "^0.0.95",
     "@ella/backend": "workspace:*",
     "@ella/shared": "workspace:*",
     "@ella/ui": "workspace:*",
-    "@convex-dev/auth": "^0.0.95",
     "browser-image-compression": "^2.0.2",
     "convex": "^1.45.0",
     "date-fns": "^4.4.0",
     "lucide-react": "^1.37.0",
     "next": "16.3.3",
+    "qrcode.react": "^4.2.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-image-crop": "^11.1.2",

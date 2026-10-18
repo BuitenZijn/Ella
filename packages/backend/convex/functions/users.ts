@@ -37,6 +37,7 @@ import {
   ROLE_PERMISSIONS,
 } from '../lib/permissions'
 import { claimStorage, deleteOwnedBlob } from '../lib/storageClaims'
+import { deleteHostedSessions } from './codenames'
 import { ResendOTP } from '../ResendOTP'
 import { ResendOTPPasswordReset } from '../ResendOTPPasswordReset'
 
@@ -702,7 +703,11 @@ export const processAccountDeletion = internalMutation({
   handler: async (ctx, { userId }) => {
     // Each feature that stores rows per user adds its step here, before the
     // storage step (a feature's rows may reference claimed blobs).
-    const steps: DeletionStep[] = [deleteFamily, deleteClaimedStorage]
+    const steps: DeletionStep[] = [
+      deleteFamily,
+      deleteHostedSessions,
+      deleteClaimedStorage,
+    ]
 
     let budget = DELETION_PASS_BUDGET
     for (const step of steps) {

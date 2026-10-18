@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { YStack, XStack, Button, ButtonText } from '@ella/ui'
 import { PermissionGate } from '@/components/admin'
 import { PageHeader } from '@/components/common'
+import { CodenamesTab } from './CodenamesTab'
 import { CraftsTab } from './CraftsTab'
 import { EntriesTab } from './EntriesTab'
 import { MemoryTab } from './MemoryTab'
@@ -17,6 +18,7 @@ const TABS = {
   crafts: 'Knutselen',
   memory: 'Memory',
   words: 'Woordjes',
+  codenames: 'Codenames',
   images: 'Puzzelafbeeldingen',
   settings: 'Instellingen',
 } as const
@@ -30,7 +32,7 @@ function ContentManager() {
       <YStack width='100%' maxWidth={1000} gap='$5'>
         <PageHeader
           title='Inhoud'
-          description='Wat alle gezinnen in de app zien: dinosaurussen, planeten, knutselvideo’s, memorythema’s, woordjes, puzzelafbeeldingen en instellingen.'
+          description='Wat alle gezinnen in de app zien: dinosaurussen, planeten, knutselvideo’s, memorythema’s, woordjes, Codenames-woorden, puzzelafbeeldingen en instellingen.'
         />
         <XStack gap='$2' flexWrap='wrap' role='tablist'>
           {(Object.keys(TABS) as Tab[]).map(key => (
@@ -53,6 +55,7 @@ function ContentManager() {
         {tab === 'crafts' && <CraftsTab />}
         {tab === 'memory' && <MemoryTab />}
         {tab === 'words' && <WordsTab />}
+        {tab === 'codenames' && <CodenamesTab />}
         {tab === 'images' && <PuzzleImagesTab />}
         {tab === 'settings' && <SettingsTab />}
       </YStack>

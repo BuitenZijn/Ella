@@ -17,6 +17,13 @@ import { permanentError } from '../lib/errors'
 import { CLAIM_WINDOW_MS } from '../lib/storageClaims'
 import { youtubeVideoId } from '../lib/youtube'
 import { DEFAULT_WORD_LISTS, WORD_LIST_MAX, WORD_LIST_MIN } from '../lib/games'
+import {
+  CLUE_WORD_MAX,
+  CODENAMES_WORDS_MAX,
+  CODENAMES_WORDS_MIN,
+  DEFAULT_CODENAMES_WORDS,
+  normalizeWord,
+} from '../lib/codenames'
 import { craftCategoryValidator, mathLevelValidator } from '../schema'
 
 const tableValidator = v.union(v.literal('dinosaurs'), v.literal('planets'))
@@ -380,6 +387,63 @@ export const importDefaultWordLists = mutation({
         updatedAt: now,
       })
     }
+    return null
+  },
+})
+
+// ============================================================================
+// Codenames words
+// ============================================================================
+
+/** The word list and whether it is still the built-in one. */
+export const getCodenamesWords = query({
+  args: {},
+  handler: async ctx => {
+    await requirePermission(ctx, 'content:manage')
+    const saved = await ctx.db.query('codenamesWords').first()
+    return saved
+      ? { words: saved.words, isDefault: false }
+      : { words: DEFAULT_CODENAMES_WORDS, isDefault: true }
+  },
+})
+
+export const saveCodenamesWords = mutation({
+  args: { words: v.array(v.string()) },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    await requirePermission(ctx, 'content:manage')
+    const words = [...new Set(args.words.map(normalizeWord).filter(Boolean))]
+    if (
+      words.length < CODENAMES_WORDS_MIN ||
+      words.length > CODENAMES_WORDS_MAX
+    ) {
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        `De lijst heeft ${CODENAMES_WORDS_MIN} tot ${CODENAMES_WORDS_MAX} verschillende woorden nodig.`,
+      )
+    }
+    if (words.some(w => w.length > CLUE_WORD_MAX)) {
+      throw permanentError(
+        'INVALID_ARGUMENT',
+        `Een woord heeft hoogstens ${CLUE_WORD_MAX} letters.`,
+      )
+    }
+    const saved = await ctx.db.query('codenamesWords').first()
+    const row = { words, updatedAt: Date.now() }
+    if (saved) await ctx.db.patch(saved._id, row)
+    else await ctx.db.insert('codenamesWords', row)
+    return null
+  },
+})
+
+/** Back to the built-in list. */
+export const resetCodenamesWords = mutation({
+  args: {},
+  returns: v.null(),
+  handler: async ctx => {
+    await requirePermission(ctx, 'content:manage')
+    const saved = await ctx.db.query('codenamesWords').first()
+    if (saved) await ctx.db.delete(saved._id)
     return null
   },
 })

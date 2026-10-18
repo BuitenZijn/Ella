@@ -14,4 +14,12 @@ crons.interval(
   {},
 )
 
+// Codenames sessions are temporary; idle ones (12 hours) are removed.
+crons.interval(
+  'remove idle codenames sessions',
+  { hours: 1 },
+  internal.functions.codenames.removeIdleSessions,
+  {},
+)
+
 export default crons
